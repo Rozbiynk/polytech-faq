@@ -117,7 +117,7 @@
   .ed-side { position: static; max-height: none; }
 }
 @media (max-width: 56rem) {
-  .ed-app { grid-template-columns: minmax(0, 1fr); }
+  .ed-app { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; align-content: start; }
   .ed-bar { display: flex; position: sticky; top: 0; z-index: var(--z-sticky-nav); align-items: center; justify-content: space-between; gap: var(--space-sm); min-height: 56px; padding: 0 var(--space-xs) 0 var(--space-md); background: var(--color-ink); color: var(--color-on-dark); }
   .ed-bar button { min-width: 48px; min-height: 48px; border: 0; background: none; color: var(--color-on-dark); font: 700 var(--text-sm)/1 var(--font-display); cursor: pointer; }
   .ed-nav { position: fixed; inset: 56px 0 0 0; height: auto; z-index: var(--z-modal); transform: translateX(-100%); transition: transform var(--dur-short) var(--ease-out); }

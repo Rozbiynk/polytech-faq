@@ -33,7 +33,7 @@
         <div class="ed-work"></div>
         <div class="ed-me"></div>
       </nav>
-      <main class="ed-main" id="main"></main>`;
+      <main class="ed-main" id="main"><p class="ed-empty">Загрузка…</p></main>`;
     app.querySelector("[data-act=menu]").addEventListener("click", (e) => {
       const open = app.querySelector(".ed-nav").classList.toggle("open");
       e.currentTarget.setAttribute("aria-expanded", open);
