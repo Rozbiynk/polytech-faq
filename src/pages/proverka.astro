@@ -1,0 +1,80 @@
+---
+// Страница для активистов: инструкция и список статей с кнопками проверки. Не в sitemap, не индексируется.
+// Отметки уходят на сервер (/api/review) и показываются всем по /api/reviews — см. public/js/review.js.
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import { stageBySlug, statuses, riskLabels } from "../site.config";
+
+const all = (await getCollection("articles")).sort((a, b) =>
+  Number(a.data.status === "verified") - Number(b.data.status === "verified") || b.data.risk - a.data.risk || (b.data.people ?? 0) - (a.data.people ?? 0));
+const n = (s: string) => all.filter((a) => a.data.status === s).length;
+---
+<Base title="Проверка статей" root="./" noindex description="Инструкция и список статей для проверки редакторами.">
+  <article class="article review">
+    <header class="article__head">
+      <h1>Проверка статей</h1>
+      <p class="lead">Для тех, кто и так отвечает на вопросы в чатах Политеха. Проверено {n("verified")} из {all.length}, сверху — самое важное.</p>
+    </header>
+
+    <section class="block block--answer review__how">
+      <h2>Как проверить статью</h2>
+      <div class="answer">
+        <ol>
+          <li>Откройте статью и её <b>официальный источник</b> (ссылки в карточке ниже).</li>
+          <li>Сверьте каждую дату, число, адрес, кабинет, телефон и сумму. Сроки должны быть текущего года.</li>
+          <li>Проверьте, что ответ отвечает на сам вопрос из заголовка.</li>
+          <li>Всё верно — нажмите <b>«Всё верно»</b>. Нет — <b>«Есть замечание»</b>: что не так и как правильно, со ссылкой.</li>
+        </ol>
+        <p>Имя можно не писать, но так проще договориться, если будут вопросы. Отметки видны всем, кто открыл эту страницу.
+        Статья получает статус «Проверено» после того, как админ примет отметку.</p>
+        <p><b>Как писать новую статью.</b> Один вопрос — одна статья. Сначала ответ в 1–3 предложениях, потом шаги.
+        Только факты с официальной ссылкой, сроки — с годом. Опыт студентов — отдельно и пересказом, без имён и цитат из чатов.
+        Предложить тему или прислать черновик — форма в конце страницы.</p>
+      </div>
+    </section>
+
+    <ol class="review__list">
+      {all.map((a) => (
+        <li class="review__item" id={a.id} data-slug={a.id}>
+          <div class="review__meta">
+            {a.data.stages.map((s) => <span class={`chip c-${s}`}>{stageBySlug[s].title}</span>)}
+            <span class={`pill ${a.data.status}`}>{statuses[a.data.status].label}</span>
+            {a.data.risk === 3 && <span class="pill risk3">{riskLabels[3]}</span>}
+          </div>
+          <h2><a href={`/q/${a.id}.html`}>{a.data.title}</a></h2>
+          <p class="review__src">
+            Источник: {a.data.sources.length
+              ? a.data.sources.map((s, i) => <>{i > 0 && ", "}<a href={s.url} target="_blank" rel="noopener">{s.title}</a></>)
+              : <b>нет, нужно найти</b>}
+          </p>
+          <ul class="review__marks" aria-live="polite"></ul>
+          <div class="review__actions">
+            <button class="btn" type="button" data-ok>Всё верно</button>
+            <button class="btn btn--quiet" type="button" data-note-toggle>Есть замечание</button>
+          </div>
+          <form class="review__form" hidden>
+            <label class="label" for={`note-${a.id}`}>Что не так и как правильно (со ссылкой)</label>
+            <textarea id={`note-${a.id}`} name="note" required></textarea>
+            <button class="btn primary" type="submit">Отправить замечание</button>
+          </form>
+        </li>
+      ))}
+    </ol>
+
+    <section class="block review__new" data-slug="new">
+      <h2>Предложить тему или черновик</h2>
+      <form class="review__form">
+        <label class="label" for="note-new">Вопрос, ответ, источник и как ещё об этом спрашивают в чатах</label>
+        <textarea id="note-new" name="note" required placeholder="Вопрос: Как получить материальную помощь?&#10;Ответ: …&#10;Источник: https://mospolytech.ru/…&#10;Как ещё спрашивают: матпомощь, материалка"></textarea>
+        <button class="btn primary" type="submit">Отправить</button>
+      </form>
+      <ul class="review__marks" aria-live="polite"></ul>
+    </section>
+
+    <div class="review__name">
+      <label class="label" for="reviewer">Ваше имя или ник (необязательно, запоминается в этом браузере)</label>
+      <input id="reviewer" class="qinput" type="text" autocomplete="nickname" maxlength="40">
+    </div>
+  </article>
+  <script is:inline src="/js/review.js" defer></script>
+</Base>

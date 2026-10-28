@@ -1,0 +1,21 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { statuses } from "../site.config";
+
+interface Props { items: CollectionEntry<"articles">[] }
+const { items } = Astro.props;
+---
+<ul class="qlist">
+  {items.map((a) => (
+    <li>
+      <a href={`/q/${a.id}.html`}>
+        <span class="q">{a.data.title}</span>
+        <span class={`pill ${a.data.status}`}>{statuses[a.data.status].label}</span>
+        <span class="meta">
+          {a.data.people && <span class="num">спрашивали {a.data.people} чел.</span>}
+          {a.data.risk === 3 && <span class="risk">важно не ошибиться</span>}
+        </span>
+      </a>
+    </li>
+  ))}
+</ul>

@@ -1,0 +1,22 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import QuestionList from "../../components/QuestionList.astro";
+import { stages } from "../../site.config";
+
+export function getStaticPaths() {
+  return stages.map((s) => ({ params: { stage: s.slug }, props: { stage: s } }));
+}
+const { stage } = Astro.props;
+const items = (await getCollection("articles", (a) => a.data.stages.includes(stage.slug)))
+  .sort((a, b) => b.data.risk - a.data.risk || (b.data.people ?? 0) - (a.data.people ?? 0));
+---
+<Base title={stage.title} root="../">
+  <section class={`banner c-${stage.slug}`}>
+    <h1>{stage.title}</h1>
+    <p class="lead">{stage.desc}</p>
+  </section>
+  {items.length
+    ? <QuestionList items={items} />
+    : <p class="empty">Здесь пока нет ответов: в разобранных чатах об этом спрашивали редко. Если у вас есть вопрос по теме, напишите в «О проекте».</p>}
+</Base>

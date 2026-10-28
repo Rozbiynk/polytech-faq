@@ -1,0 +1,47 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import Search from "../components/Search.astro";
+import QuestionList from "../components/QuestionList.astro";
+import { site, stages } from "../site.config";
+
+const all = await getCollection("articles");
+const byPeople = [...all].sort((a, b) => (b.data.people ?? 0) - (a.data.people ?? 0));
+const popular = site.popular.map((id) => all.find((a) => a.id === id)).filter(Boolean);
+---
+<Base root="./">
+  <section class="hero band">
+    <div class="hero__text">
+      <h1>Ответы на вопросы, которые в чатах задают каждый год</h1>
+      <p class="lead">{site.tagline}. Ищите своими словами: <mark>«общага»</mark>, <mark>«ЛК»</mark>, <mark>«вторая волна»</mark>.</p>
+      <div class="searchbox">
+        <Search />
+      </div>
+      <div class="popular">
+        <span class="popular__label">Часто ищут</span>
+        <ul>{popular.map((a) => <li><a href={`/q/${a!.id}.html`}>{a!.data.title}</a></li>)}</ul>
+      </div>
+    </div>
+
+    <section class="stages-wrap" aria-labelledby="stages-h">
+      <h2 id="stages-h">На каком вы этапе?</h2>
+      <div class="stages">
+        {stages.map((s) => ({ s, n: all.filter((a) => a.data.stages.includes(s.slug)).length }))
+          .filter(({ n }) => n > 0) /* пустой этап не показываем, его страница остаётся */
+          .map(({ s }) => {
+          return (
+            <a class={`stage c-${s.slug}`} href={`/stage/${s.slug}.html`}>
+              <strong>{s.title}</strong>
+              <span>{s.desc}</span>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  </section>
+
+  <section class="section split">
+    <h2>Чаще всего спрашивают</h2>
+    <QuestionList items={byPeople.slice(0, 10)} />
+  </section>
+</Base>

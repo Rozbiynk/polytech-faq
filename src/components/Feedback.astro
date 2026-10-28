@@ -1,0 +1,20 @@
+---
+// Обратная связь: POST JSON на feedbackUrl → rozb-faq-feedback на сервере (server/feedback.py), пишет в feedback.jsonl.
+interface Props { slug: string }
+const { slug } = Astro.props;
+---
+<section class="feedback" data-slug={slug} data-feedback-url="/api/feedback">
+  <div class="row">
+    <span class="feedback__q">Помогла ли статья?</span>
+    <button class="btn" type="button" data-vote="yes">Да</button>
+    <button class="btn" type="button" data-vote="no">Нет</button>
+    <button class="btn btn--quiet" type="button" data-toggle>Сообщить об ошибке</button>
+  </div>
+  <form hidden>
+    <label for={`fix-${slug}`} class="label">Что не так или устарело</label>
+    <textarea id={`fix-${slug}`} name="text" required placeholder="Например: в 2026 году заселение начинается с 28 августа, вот ссылка…"></textarea>
+    <div class="row"><button class="btn primary" type="submit">Отправить</button></div>
+  </form>
+  <p class="thanks" hidden></p>
+</section>
+<script is:inline src="/js/feedback.js" defer></script>

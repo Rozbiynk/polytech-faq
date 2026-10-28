@@ -1,0 +1,32 @@
+# Сборка сайта на каждую правку. main → ветка deploy (готовый dist/), откуда её раз в минуту забирает сервер
+# (rozb-faq-pull.timer на rozb-server). Предложения правок (pull request) только собираются — проверка, что сайт не сломан.
+name: build
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: write
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - if: github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: deploy
+          publish_dir: ./dist
+          force_orphan: true
+          commit_message: "сайт из ${{ github.sha }}"

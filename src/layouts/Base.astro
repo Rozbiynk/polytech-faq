@@ -1,0 +1,59 @@
+---
+import "@fontsource/montserrat/600.css";
+import "@fontsource/montserrat/700.css";
+import "../styles/theme.css";
+import { site } from "../site.config";
+
+interface Props { title?: string; description?: string; root: string; noindex?: boolean }
+const { title, description = site.tagline, root, noindex = false } = Astro.props;
+const fullTitle = title ? `${title} — ${site.name}` : site.name;
+const canonical = new URL(Astro.url.pathname.replace(/\/$/, "/index.html"), site.url).href;
+const ogImage = new URL("/og.png", site.url).href;
+---
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <!-- превью ссылки в Telegram, VK и мессенджерах -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:title" content={title ?? site.name} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <!-- data-root: путь до корня сайта от текущей страницы, нужен поиску для ссылок на результаты -->
+  <body data-root={root}>
+    <header class="top">
+      <div class="container top__row">
+        <div class="top__brand">
+          <a class="logo" href="/index.html">Политех. <b>Выжить и выпуститься</b></a>
+          <span class="top__note">Неофициальный сайт студентов</span>
+        </div>
+        <nav aria-label="Разделы"><a class="btn btn--light" href="/about.html">О проекте</a></nav>
+      </div>
+    </header>
+    <main class="container page">
+      <slot />
+    </main>
+    <footer class="foot">
+      <div class="container foot__row">
+        <p class="foot__mark">Политех.<br />Выжить и выпуститься</p>
+        <p class="foot__note">Неофициальный сайт студентов. Ответы собраны из открытых студенческих чатов и сверены с сайтом университета там, где это указано. Они не заменяют официальные документы вуза.</p>
+      </div>
+    </footer>
+  </body>
+</html>
+<style is:global>
+  /* дублирует base.css: линтер Hallmark проверяет макет отдельно от стилей */
+  html, body { overflow-x: clip; }
+</style>
