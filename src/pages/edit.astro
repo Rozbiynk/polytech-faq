@@ -1,0 +1,22 @@
+---
+// Редактор статей: вход по ссылке-приглашению, черновики, проверка и публикация. Всё рисует public/js/editor.js,
+// данные — /api/ed/* (server/editor.py на rozb-server). Страница не индексируется и не попадает в поиск.
+import "@fontsource/montserrat/600.css";
+import "@fontsource/montserrat/700.css";
+import "../styles/theme.css";
+import "../styles/editor.css";
+import { site, stages, riskLabels } from "../site.config";
+---
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Редактор — {site.name}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body class="ed" data-stages={JSON.stringify(stages.map((s) => [s.slug, s.title]))} data-risks={JSON.stringify(riskLabels)}>
+    <div id="app" class="ed-app"><p class="ed-empty">Загрузка…</p></div>
+    <script src="/js/editor.js" defer></script>
+  </body>
+</html>

@@ -42,10 +42,12 @@ Pagefind индексирует собранный сайт (`pnpm build` = `ast
 
 ## Правка статей и выкладка (с 2026-10-29)
 Код — открытый репозиторий https://github.com/Rozbiynk/polytech-faq (корень — эта папка `site/`).
-- **Редактор для всех: https://faq.rozb.pw/edit** — Decap CMS (`public/edit/`, поля в `config.yml` = схема статьи).
-  Вход через GitHub OAuth App «FAQ Политеха — редактор»; обмен кода на токен — `../server/oauth.py`.
-  Без прав на запись правка уходит pull request'ом (open authoring), с правами — через вкладку «Workflow»
-  (`editorial_workflow`). Дать человеку права публиковать: Settings → Collaborators на GitHub.
+- **Редактор: https://faq.rozb.pw/edit** — свой, в стиле сайта: `src/pages/edit.astro`, `src/styles/editor.css`,
+  `public/js/editor.js`. Вход по ссылке-приглашению (без GitHub-аккаунта); редактор отправляет правку на проверку,
+  админ публикует. Сервер — `../editor/` (Rust, сервис `rozb-faq-editor` на rozb-server, `/api/ed/*`): черновики,
+  приглашения, коммит в `main` от имени автора правки по deploy key. Поле `todo` («что раскрыть») видно только там.
+- Запасной редактор для владельцев GitHub-аккаунтов — Decap CMS на `/decap` (`public/decap/`, вход через GitHub OAuth,
+  `../server/oauth.py`). Можно удалить, если не нужен.
 - **Выкладка сама:** push в `main` → GitHub Actions (`.github/workflows/deploy.yml`) собирает → ветка `deploy` →
   `rozb-faq-pull.timer` на сервере раз в минуту забирает её в `/srv/rozb-faq` (`../server/rozb-faq-pull`).
 - Править локально: `git pull`, правка, `git commit`, `./deploy.sh` (проверит сборку и сделает push).

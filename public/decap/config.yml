@@ -1,4 +1,4 @@
-# Decap CMS — редактор статей на /edit. Поля повторяют src/content.config.ts: поменяли схему — поменяйте и тут.
+# Decap CMS на /decap — запасной редактор для владельцев GitHub-аккаунтов (основной — /edit). Поля повторяют src/content.config.ts: поменяли схему — поменяйте и тут.
 backend:
   name: github
   repo: Rozbiynk/polytech-faq

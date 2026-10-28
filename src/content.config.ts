@@ -16,6 +16,7 @@ const articles = defineCollection({
     people: z.number().int().optional(),                         // сколько человек спрашивали в чатах
     aliases: z.array(z.string()).default([]),                    // формулировки из чата — только для поиска
     tips: z.array(z.string()).default([]),                       // советы студентов, отдельно от фактов
+    todo: z.array(z.object({ text: z.string(), done: z.boolean() })).default([]), // «что раскрыть» — видно только в /edit
   }),
 });
 
