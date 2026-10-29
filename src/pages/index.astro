@@ -12,14 +12,18 @@ const popular = site.popular.map((id) => all.find((a) => a.id === id)).filter(Bo
 <Base root="./">
   <section class="hero band">
     <div class="hero__text">
+      <p class="eyebrow">{site.slogan}</p>
       <h1>Ответы на вопросы, которые в чатах задают каждый год</h1>
-      <p class="lead">{site.tagline}. Ищите своими словами: <mark>«общага»</mark>, <mark>«ЛК»</mark>, <mark>«вторая волна»</mark>.</p>
+      <p class="lead">{site.tagline}. Ищите своими словами:</p>
+      <div class="hints" aria-label="Примеры запросов">
+        {site.hints.map((h) => <button type="button" class="hint" data-q={h}>{h}</button>)}
+      </div>
       <div class="searchbox">
         <Search />
       </div>
       <div class="popular">
         <span class="popular__label">Часто ищут</span>
-        <ul>{popular.map((a) => <li><a href={`/q/${a!.id}.html`}>{a!.data.title}</a></li>)}</ul>
+        <ul>{popular.map((a) => <li><a href={`/q/${a!.id}.html`}>{a!.data.title} <span aria-hidden="true">→</span></a></li>)}</ul>
       </div>
     </div>
 
@@ -33,6 +37,7 @@ const popular = site.popular.map((id) => all.find((a) => a.id === id)).filter(Bo
             <a class={`stage c-${s.slug}`} href={`/stage/${s.slug}.html`}>
               <strong>{s.title}</strong>
               <span>{s.desc}</span>
+              <span class="stage__go" aria-hidden="true">→</span>
             </a>
           );
         })}
@@ -40,10 +45,16 @@ const popular = site.popular.map((id) => all.find((a) => a.id === id)).filter(Bo
     </section>
   </section>
 
-  <section class="section split">
-    <h2>Чаще всего спрашивают</h2>
-    <div class="split__body">
-      <QuestionList items={byPeople.slice(0, 10)} />
+  <section class="section split" aria-labelledby="top-h">
+    <h2 id="top-h">Чаще всего спрашивают</h2>
+    <div class="split__body top-list">
+      <!-- темы: показывают 10 самых частых вопросов темы (public/js/top-topics.js); без JS — общий топ-10 -->
+      <div class="tabs" role="group" aria-label="Тема">
+        <button type="button" class="tab" data-topic="" aria-pressed="true">Все темы</button>
+        {topics.filter((t) => all.some((a) => topicOf(a.id, a.data.stages) === t.slug))
+          .map((t) => <button type="button" class="tab" data-topic={t.slug} aria-pressed="false">{t.title}</button>)}
+      </div>
+      <QuestionList items={byPeople} limit={10} />
       <a class="btn more" href="/questions.html">Все вопросы ({all.length}) →</a>
     </div>
   </section>
@@ -62,4 +73,5 @@ const popular = site.popular.map((id) => all.find((a) => a.id === id)).filter(Bo
         ))}
     </ul>
   </section>
+  <script is:inline src="/js/top-topics.js" defer></script>
 </Base>

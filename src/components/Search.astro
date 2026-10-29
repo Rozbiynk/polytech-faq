@@ -1,7 +1,8 @@
 ---
 import { site } from "../site.config";
 ---
+<!-- до загрузки Pagefind — такое же поле, только неактивное: вёрстка не прыгает -->
 <div id="search" class="search" data-hint={site.searchHint}>
-  <p class="search-fallback">Загружаю поиск…</p>
+  <input class="qinput" type="search" placeholder={site.searchHint} aria-label="Поиск по вопросам" disabled />
 </div>
 <script is:inline src="/js/search.js" defer></script>
