@@ -13,7 +13,9 @@ import { site, stages, riskLabels } from "../site.config";
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="robots" content="noindex, nofollow" />
     <title>Редактор — {site.name}</title>
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   </head>
   <body class="ed" data-stages={JSON.stringify(stages.map((s) => [s.slug, s.title]))} data-risks={JSON.stringify(riskLabels)}>
     <div id="app" class="ed-app"><p class="ed-empty">Загрузка…</p></div>
