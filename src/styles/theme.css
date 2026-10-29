@@ -1,5 +1,5 @@
 /* Hallmark · shape: Index-First · genre: modern-minimal · theme: brand (Московский Политех, spec 2026-10-27) · redesign: full · job: find an answer
- * paper: #ffffff · accent: #e63246 · display: Montserrat (stand-in for Gilroy) · body: Verdana · hero: Index (/), Banner (/stage/*), kept (/q/*, /about) · nav: a dark slab, the wordmark, an unofficial note and one light button · footer: a mast on the dark band · signature: the stages as solid blocks in the university's four extra colours on the dark band, beside the search
+ * paper: #ffffff · accent: #e63246 · display: Onest (stand-in for Gilroy) · body: Verdana · hero: Index (/), Banner (/stage/*), kept (/q/*, /about) · nav: a dark slab, the wordmark, an unofficial note and one light button · footer: a mast on the dark band · signature: the stages as solid blocks in the university's four extra colours on the dark band, beside the search
  * axes: light/geometric-sans/chromatic-red · posture: full-palette · surface: absolute · contrast: pass · fold: pass · v2.0.0 */
 /* Hallmark · pre-emit critique: P4 H5 E4 S4 R4 V4 · weakest: P, a brand look is the university's argument, not ours; the unofficial note in the nav and the missing logo keep the site honest */
 /* Hallmark · waive 78 · article and about pages are a Long Document with inline heads · an answer page reads as one document, its heads stay at title size */
@@ -19,15 +19,10 @@
 @font-face { font-family: "DejaVu Sans Web"; src: url("../fonts/DejaVuSans-Bold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
 @font-face { font-family: "DejaVu Sans Web"; src: url("../fonts/DejaVuSans-Oblique.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
 
-/* Gilroy — шрифт брендбука, веб-лицензия куплена отдельно. Файлы НЕ в репозитории (он открытый, лицензия запрещает
-   раздавать шрифт): лежат только на сервере в /srv/rozb-faq/fonts/gilroy/, выкладка их не трогает (rozb-faq-pull).
-   Нет файлов (локально, превью) — заголовки остаются в Montserrat. */
-@font-face { font-family: "Gilroy"; src: url("/fonts/Gilroy-SemiBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
-@font-face { font-family: "Gilroy"; src: url("/fonts/Gilroy-Bold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
 
 /* Стиль Московского Политеха: чёрный и белый как основа, красный акцент, синие ссылки, доп. цвета — на этапах.
    Значения — tokens.css (из брендбука и CSS mospolytech.ru). Логотип вуза не используется: сайт неофициальный.
-   Шрифт заголовков — Gilroy (своя веб-лицензия), запасной — Montserrat. */
+   Шрифт заголовков — Onest (свободная лицензия OFL, похож на Gilroy из брендбука: у Gilroy нет веб-лицензии). */
 :root {
   --nav-h: 76px; --radius: 4px; --radius-panel: 0;
   /* размеры ближе к mospolytech.ru (текст 14–16 px, подзаголовки 24 px), но не мельче 16 px: Verdana широкая */

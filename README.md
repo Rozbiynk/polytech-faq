@@ -64,9 +64,9 @@ pnpm build      # → dist/
 pnpm preview    # посмотреть сборку
 ./deploy.sh     # проверить сборку и отправить в GitHub (выкладка сама)
 ```
-**Gilroy** (заголовки) — по своей веб-лицензии, файлов в репозитории нет: `public/fonts/gilroy/` в `.gitignore`.
-На сервере — `/srv/rozb-faq/fonts/gilroy/Gilroy-SemiBold.woff2` и `Gilroy-Bold.woff2` (см. `../server/README.md`),
-локально — положить те же файлы в `public/fonts/gilroy/`. Без них заголовки в Montserrat.
+**Шрифт заголовков — Onest** (`@fontsource/onest`, OFL). Gilroy из брендбука не подключён: нужна купленная веб-лицензия.
+С ней — положить файлы на сервер в `/srv/rozb-faq/fonts/gilroy/` (выкладка их не стирает, см. `../server/README.md`),
+добавить `@font-face` в `theme.css` и поставить "Gilroy" первым в `--font-display` (`tokens.css`).
 
 CSP сервера строгий: без inline-скриптов и стилей, шрифты только свои (`@fontsource`), wasm для Pagefind разрешён.
 Поэтому скрипты — в `public/js/`, CSS — файлами, `assetsInlineLimit: 0`.
