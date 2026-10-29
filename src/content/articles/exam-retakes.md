@@ -5,12 +5,16 @@ stages: ["first-year", "study"]
 risk: 3
 status: "sourced"
 checked: 2026-10-29
-sources: [{"title": "Справочник первокурсника 2025, с. 22", "url": "https://mospolytech.ru/upload/iblock/810/8vjsfiw3rzitkau9o1avvibcbyefo9nc/Spravochnik-pervokursnika-2025.pdf#page=22"}, {"title": "Расписания", "url": "https://mospolytech.ru/obuchauschimsya/raspisaniya/"}]
+sources: [{"title": "Справочник первокурсника 2025, с. 22", "url": "https://mospolytech.ru/upload/iblock/810/8vjsfiw3rzitkau9o1avvibcbyefo9nc/Spravochnik-pervokursnika-2025.pdf#page=22"}, {"title": "Расписания", "url": "https://mospolytech.ru/obuchauschimsya/raspisaniya/"}, {"title": "Положение о текущем контроле и промежуточной аттестации", "url": "https://mospolytech.ru/upload/medialibrary/462/polozhenie-o-provedenii-tekushchego-kontrolya-uspevaemosti-i-promezhutochnoj-attestacii-obuchayushchikhsya.pdf"}]
 aliases: ["пересдача", "завалил экзамен", "академическая задолженность", "сколько пересдач", "комиссия пересдача", "когда пересдачи", "отчислят за долги"]
 tips: []
 todo: [{"text": "Сверено по справочнику первокурсника 2025 — проверить, не изменилось ли в 2026/27", "done": false}]
 ---
 
-Несданный экзамен — это **академическая задолженность**. Её можно пересдать **не больше двух раз** в сроки, которые устанавливает вуз. Вторая пересдача — комиссии.
+**Академическая задолженность** — это «неудовлетворительно» на экзамене или зачёте либо неявка на него **без уважительной причины**. С долгами переводят на следующий курс условно.
+
+Долг можно пересдать **не больше двух раз** в сроки, которые устанавливает вуз. Вторая пересдача — комиссии.
 
 График пересдач утверждает проректор и публикует на сайте вуза (страница «Расписания»). Если не закрыть долг до конца графика, **отчисляют за неуспеваемость**.
+
+Если пропустили по уважительной причине (болезнь), это не долг: см. [«Что делать, если заболел и пропустил экзамен»](/q/missed-exam).
