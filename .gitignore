@@ -3,3 +3,5 @@ dist/
 .astro/
 .hallmark/
 /.claude/
+# Gilroy: лицензия запрещает выкладывать файлы шрифта в открытый доступ — только на сервер
+public/fonts/gilroy/
