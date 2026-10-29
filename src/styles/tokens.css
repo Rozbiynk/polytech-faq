@@ -14,7 +14,7 @@
   --color-rule: #e0e0e0; --color-on-dark: #ffffff; --color-on-dark-2: #bcbcbc;
   --color-accent: #e63246; --color-accent-deep: #cf283b; --color-accent-ink: #ffffff; --color-focus: #4b6eb9;
   --color-blue: #4b6eb9; --color-purple: #874ba0; --color-green: #55b432;
-  --font-display: "Onest", ui-sans-serif, system-ui, sans-serif; --font-body: Verdana, "DejaVu Sans Web", "DejaVu Sans", ui-sans-serif, system-ui, sans-serif; --font-outlier: var(--font-body);
+  --font-display: "Gilroy", "Montserrat", ui-sans-serif, system-ui, sans-serif; --font-body: Verdana, "DejaVu Sans Web", "DejaVu Sans", ui-sans-serif, system-ui, sans-serif; --font-outlier: var(--font-body);
   --radius-card: 4px; --radius-pill: 999px; --rule-hair: 1px; --shadow-card: none;
   --tracking-display: -0.02em;
 }
