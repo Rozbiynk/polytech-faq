@@ -34,7 +34,7 @@
       translations: { placeholder: hint }, autofocus: focus,
       // Pagefind отдаёт адреса от корня сайта; делаем их относительными к текущей странице
       processResult: (r) => {
-        r.url = root + r.url.replace(/^\//, "");
+        r.url = root + r.url.replace(/^\//, "").replace(/\.html$/, "");   // адреса без .html
         // под заголовком — начало ответа, а не совпадение в формулировках из чатов
         const sum = r.meta && r.meta.summary;
         if (sum) r.excerpt = sum.length > 160 ? sum.slice(0, 160).replace(/\s+\S*$/, "") + "…" : sum;
@@ -81,7 +81,7 @@
       }
       for (const { x } of hits) {
         const li = document.createElement("li"), a = document.createElement("a"), q = document.createElement("span");
-        a.href = root + "q/" + x.it.id + ".html"; q.className = "q"; q.textContent = x.it.title;
+        a.href = root + "q/" + x.it.id; q.className = "q"; q.textContent = x.it.title;
         a.append(q); li.append(a); out.append(li);
       }
     });

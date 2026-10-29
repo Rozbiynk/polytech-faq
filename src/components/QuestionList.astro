@@ -9,7 +9,7 @@ const { items, limit = Infinity } = Astro.props;
 <ul class="qlist">
   {items.map((a, i) => (
     <li data-stages={a.data.stages.join(" ")} data-topic={topicOf(a.id, a.data.stages)} hidden={i >= limit}>
-      <a href={`/q/${a.id}.html`}>
+      <a href={`/q/${a.id}`}>
         <span class="q">{a.data.title}</span>
         <span class="qlist__go" aria-hidden="true">→</span>
         <span class="badges">
