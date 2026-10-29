@@ -6,9 +6,9 @@ risk: 2
 status: "sourced"
 checked: 2026-10-29
 sources: [{"title": "Библиотека", "url": "https://mospolytech.ru/obuchauschimsya/biblioteka/"}, {"title": "Справочник первокурсника 2025, с. 14, 15", "url": "https://mospolytech.ru/upload/iblock/810/8vjsfiw3rzitkau9o1avvibcbyefo9nc/Spravochnik-pervokursnika-2025.pdf#page=14"}]
-actual: "Справочник первокурсника 2025"
 aliases: ["как получить учебники", "библиотека часы работы", "когда сдавать книги", "учебники бесплатно", "до какого числа вернуть книги в библиотеку"]
 tips: []
+todo: [{"text": "Сверено по справочнику первокурсника 2025 — проверить, не изменилось ли в 2026/27", "done": false}]
 ---
 
 Учебники выдают на учебный год **по заявкам**, их **надо вернуть до 10 июля**.

@@ -6,9 +6,9 @@ risk: 2
 status: "sourced"
 checked: 2026-10-29
 sources: [{"title": "ЛМС Московского Политеха", "url": "https://online.mospolytech.ru/"}, {"title": "Справочник первокурсника 2025, с. 26", "url": "https://mospolytech.ru/upload/iblock/810/8vjsfiw3rzitkau9o1avvibcbyefo9nc/Spravochnik-pervokursnika-2025.pdf#page=26"}]
-actual: "Справочник первокурсника 2025"
 aliases: ["лмс", "lms", "не могу войти в лмс", "пароль от лмс", "online.mospolytech", "где логин от лмс"]
 tips: []
+todo: [{"text": "Сверено по справочнику первокурсника 2025 — проверить, не изменилось ли в 2026/27", "done": false}]
 ---
 
 **ЛМС** — платформа онлайн-обучения: [online.mospolytech.ru](https://online.mospolytech.ru/). Нужен только браузер.

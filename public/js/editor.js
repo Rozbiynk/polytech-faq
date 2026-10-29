@@ -401,6 +401,15 @@
   }
 
   // ---------- редакторы ----------
+  const editorRows = (editors) => editors.map((e) => `<li><div class="row"><strong>${esc(e.name)}</strong><span class="meta">${e.role === "admin" ? "администратор" : "редактор"} · с ${date(e.created)}</span>
+            <span class="side">${e.id === me.id ? `<span class="tag">это вы</span>` : `<button type="button" class="btn btn--quiet" data-revoke="${e.id}">Отозвать</button>`}</span></div></li>`).join("");
+  // список перерисовывается на месте: после приглашения и при возврате на вкладку — ссылка-приглашение не пропадает
+  async function refreshEditors() {
+    const ul = main().querySelector("[data-editors]");
+    if (!ul) return;
+    try { ul.innerHTML = editorRows((await api("editors")).editors); } catch {}
+  }
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && current === "settings") refreshEditors(); });
   async function viewSettings() {
     if (me.role !== "admin") {
       main().innerHTML = `<div class="ed-head"><h1>Настройки</h1></div><section class="ed-sheet"><p>Вы вошли как <b>${esc(me.name)}</b>, редактор. Правки отправляются на проверку администратору.</p><button type="button" class="btn" data-out>Выйти на этом устройстве</button></section>`;
@@ -411,8 +420,7 @@
           <div class="ed-rows"><div><input type="text" data-new-name placeholder="Имя, например Антон" aria-label="Имя"><select data-new-role aria-label="Роль"><option value="editor">Редактор — правки на проверку</option><option value="admin">Администратор — публикует сам</option></select></div></div>
           <button type="button" class="btn primary" data-invite>Создать ссылку</button><div data-link></div></section>
         <section class="ed-sheet"><h2>Кто может править</h2>
-          <ul class="ed-list">${editors.map((e) => `<li><div class="row"><strong>${esc(e.name)}</strong><span class="meta">${e.role === "admin" ? "администратор" : "редактор"} · с ${date(e.created)}</span>
-            <span class="side">${e.id === me.id ? `<span class="tag">это вы</span>` : `<button type="button" class="btn btn--quiet" data-revoke="${e.id}">Отозвать</button>`}</span></div></li>`).join("")}</ul></section>
+          <ul class="ed-list" data-editors>${editorRows(editors)}</ul></section>
         <section class="ed-sheet"><button type="button" class="btn" data-out>Выйти на этом устройстве</button></section>`;
     }
     nav("settings");
@@ -426,13 +434,15 @@
       try {
         const r = await api("editors", { method: "POST", body: { name, role } });
         box.innerHTML = `<div class="ed-link"><b>Ссылка для ${esc(name)}</b><code>${esc(r.link)}</code><button type="button" class="btn" data-copy="${esc(r.link)}">Скопировать</button></div>`;
+        main().querySelector("[data-new-name]").value = "";
+        refreshEditors();
       } catch (err) { box.innerHTML = `<p class="ed-err">${esc(err.message)}</p>`; }
     }
     if (b.dataset.copy) { try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = "Скопировано"; } catch { b.textContent = "Скопируйте вручную"; } }
     if (b.dataset.revoke) {
       if (b.dataset.sure !== "1") { b.dataset.sure = "1"; b.textContent = "Точно отозвать?"; return; }
       await api("editors/" + b.dataset.revoke, { method: "DELETE", body: {} }).catch((err) => alertBox(err.message));
-      viewSettings();
+      refreshEditors();
     }
   });
   const alertBox = (text) => main().insertAdjacentHTML("afterbegin", `<p class="ed-err">${esc(text)}</p>`);
