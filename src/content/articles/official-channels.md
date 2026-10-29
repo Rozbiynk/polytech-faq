@@ -6,9 +6,9 @@ risk: 1
 status: "sourced"
 checked: 2026-10-29
 sources: [{"title": "Сайт Московского Политеха", "url": "https://mospolytech.ru/"}, {"title": "Справочник первокурсника 2025, с. 44", "url": "https://mospolytech.ru/upload/iblock/810/8vjsfiw3rzitkau9o1avvibcbyefo9nc/Spravochnik-pervokursnika-2025.pdf#page=44"}]
-actual: "Справочник первокурсника 2025"
 aliases: ["официальный телеграм политеха", "группа вк политех", "где новости вуза", "соцсети политеха"]
 tips: []
+todo: [{"text": "Сверено по справочнику первокурсника 2025 — проверить, не изменилось ли в 2026/27", "done": false}]
 ---
 
 - сайт: [mospolytech.ru](https://mospolytech.ru/);

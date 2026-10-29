@@ -6,9 +6,9 @@ risk: 2
 status: "sourced"
 checked: 2026-10-29
 sources: [{"title": "Проверка в реестре студентов (mos.ru)", "url": "https://www.mos.ru/karta-moskvicha/services-proverka-grazhdanina-v-reestre-studentov/"}, {"title": "Справочник первокурсника 2025, с. 28", "url": "https://mospolytech.ru/upload/iblock/810/8vjsfiw3rzitkau9o1avvibcbyefo9nc/Spravochnik-pervokursnika-2025.pdf#page=28"}]
-actual: "Справочник первокурсника 2025"
 aliases: ["карта москвича", "социальная карта студента", "льготный проезд", "нет в реестре студентов", "студенческий проездной", "соцкарта"]
 tips: []
+todo: [{"text": "Сверено по справочнику первокурсника 2025 — проверить, не изменилось ли в 2026/27", "done": false}]
 ---
 
 Социальную карту (карту москвича) для льготного проезда могут оформить **очники**.

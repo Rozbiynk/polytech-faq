@@ -6,9 +6,9 @@ risk: 1
 status: "sourced"
 checked: 2026-10-29
 sources: [{"title": "Справочник первокурсника 2025, с. 25, 32", "url": "https://mospolytech.ru/upload/iblock/810/8vjsfiw3rzitkau9o1avvibcbyefo9nc/Spravochnik-pervokursnika-2025.pdf#page=25"}, {"title": "Профком Московского Политеха", "url": "https://profkommospolytech.ru/"}]
-actual: "Справочник первокурсника 2025"
 aliases: ["материальная помощь", "матпомощь", "дотация профком", "выплаты студентам"]
 tips: []
+todo: [{"text": "Сверено по справочнику первокурсника 2025 — проверить, не изменилось ли в 2026/27", "done": false}]
 ---
 
 - **Материальная помощь** — разовая выплата, если оказались в трудном положении.

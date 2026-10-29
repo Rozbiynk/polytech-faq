@@ -6,9 +6,9 @@ risk: 2
 status: "sourced"
 checked: 2026-10-29
 sources: [{"title": "Справочник первокурсника 2025, с. 21", "url": "https://mospolytech.ru/upload/iblock/810/8vjsfiw3rzitkau9o1avvibcbyefo9nc/Spravochnik-pervokursnika-2025.pdf#page=21"}, {"title": "Расписания", "url": "https://mospolytech.ru/obuchauschimsya/raspisaniya/"}]
-actual: "Справочник первокурсника 2025"
 aliases: ["как проходит сессия", "где посмотреть оценки", "электронная зачетка", "когда сессия", "зачетка где"]
 tips: []
+todo: [{"text": "Сверено по справочнику первокурсника 2025 — проверить, не изменилось ли в 2026/27", "done": false}]
 ---
 
 В году **два семестра**, осенний и весенний. В конце каждого — сессия: зачёты, экзамены, защита курсовых работ и проектов. Кроме того, по учебному плану бывают практики.
