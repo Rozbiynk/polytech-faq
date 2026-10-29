@@ -22,12 +22,12 @@ export const stageBySlug = Object.fromEntries(stages.map((s) => [s.slug, s]));
 // Темы — вторая ось навигации («Все вопросы», главная, «← тема» в статье). У статьи одна тема.
 export const topics = [
   { slug: "admission", title: "Поступление", desc: "Документы, экзамены, приоритеты, списки, зачисление" },
-  { slug: "study", title: "Учёба", desc: "Начало занятий, расписание, учебный план, практика" },
+  { slug: "study", title: "Учёба и кампус", desc: "Пары, сессия, пересдачи, корпуса, библиотеки, еда" },
   { slug: "documents", title: "Документы и сервисы", desc: "Личный кабинет, пропуск, студенческий, справки" },
   { slug: "money", title: "Деньги", desc: "Стипендии, оплата обучения" },
   { slug: "dorm", title: "Общежитие", desc: "Заселение, справки, условия и цены" },
-  { slug: "support", title: "Здоровье и поддержка", desc: "Медсправки, отсрочка, куда обращаться" },
-  { slug: "career", title: "Работа и возможности", desc: "Проекты, стажировки, помощь с работой" },
+  { slug: "support", title: "Поддержка", desc: "Куратор, психолог, профком, отсрочка, куда обращаться" },
+  { slug: "career", title: "Возможности", desc: "Проекты, наука, спорт, творчество, работа" },
   { slug: "change", title: "Смена планов и выпуск", desc: "Академ, перевод, отчисление, диплом" },
 ] as const;
 export type TopicSlug = (typeof topics)[number]["slug"];
@@ -44,6 +44,16 @@ const topicMap: Record<string, TopicSlug> = {
   "dermatology-certificate": "dorm",
   "army-deferment": "support", "contacts": "support",
   "career-center": "career", "project-activity": "career",
+  // по справочнику первокурсника 2025
+  "campus-food": "study", "campus-locations": "study", "class-duration": "study", "find-classroom": "study",
+  "library-borrowing": "study", "library-locations": "study", "digital-libraries": "study", "group-representative": "study",
+  "session-and-grades": "study", "exam-admission": "study", "exam-retakes": "study", "missed-exam": "study",
+  "first-year-curator": "support", "psychological-support": "support", "international-office": "support", "student-union": "support",
+  "lms-login": "documents", "university-mfc": "documents", "official-channels": "documents", "student-social-card": "documents",
+  "enhanced-scholarship": "money", "social-scholarship": "money", "paid-student-scholarship": "money", "financial-aid": "money",
+  "student-campus-office": "dorm",
+  "competency-passport": "career", "first-year-projects": "career", "own-project": "career", "student-science": "career",
+  "student-communities": "career", "creative-communities": "career", "sports-club": "career", "museums": "career", "university-merch": "career",
 };
 const topicByStage: Record<string, TopicSlug> = {
   apply: "admission", "first-year": "study", study: "study", live: "dorm", change: "change", graduate: "change",
