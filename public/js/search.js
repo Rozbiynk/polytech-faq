@@ -13,6 +13,13 @@
   const hint = box.dataset.hint;
   // из лупы в шапке приходят по ссылке …#search — сразу ставим курсор в поле
   const focus = location.hash === "#search";
+  // чипсы-подсказки (data-q): подставляют запрос в строку; до загрузки поиска — запоминаем последний
+  let setQuery = null, pending = null;
+  document.addEventListener("click", (e) => {
+    const chip = e.target.closest("[data-q]");
+    if (!chip) return;
+    if (setQuery) setQuery(chip.dataset.q); else pending = chip.dataset.q;
+  });
 
   // Основной поиск — Pagefind (полнотекстовый, с морфологией). Если его файлов нет — простой поиск по search.json.
   const s = document.createElement("script");
@@ -22,7 +29,7 @@
     css.rel = "stylesheet"; css.href = base + "pagefind-ui.css";
     document.head.append(css);
     box.textContent = "";
-    new PagefindUI({
+    const ui = new PagefindUI({
       element: "#search", bundlePath: base, showImages: false, showSubResults: false, resetStyles: false,
       translations: { placeholder: hint }, autofocus: focus,
       // Pagefind отдаёт адреса от корня сайта; делаем их относительными к текущей странице
@@ -34,6 +41,8 @@
         return r;
       },
     });
+    setQuery = (q) => { ui.triggerSearch(q); box.querySelector(".pagefind-ui__search-input")?.focus(); };
+    if (pending) setQuery(pending);
     let timer;
     box.addEventListener("input", (e) => {
       if (!e.target.matches(".pagefind-ui__search-input")) return;
@@ -76,5 +85,7 @@
         a.append(q); li.append(a); out.append(li);
       }
     });
+    setQuery = (q) => { input.value = q; input.dispatchEvent(new Event("input")); input.focus(); };
+    if (pending) setQuery(pending);
   }
 })();

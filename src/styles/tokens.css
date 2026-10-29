@@ -9,7 +9,7 @@
   --container: 1440px; --gutter: 64px; --gap-columns: 32px; --section-gap-s: 120px; --section-gap: 144px; --section-gap-l: 176px;
   --z-base: 1; --z-raised: 10; --z-dropdown: 100; --z-sticky: 200; --z-sticky-nav: 300; --z-modal: 400; --z-toast: 500; --z-tooltip: 600;
   /* Московский Политех: брендбук (Logobuk, 2016) и CSS mospolytech.ru, см. .hallmark/brand-spec.md */
-  --color-paper: #ffffff; --color-paper-2: #eeeeee; --color-paper-3: #e6e6e6;
+  --color-paper: #ffffff; --color-paper-2: #eeeeee; --color-paper-3: #e6e6e6; --color-well: #f8f8f8;
   --color-ink: #1e1e1e; --color-ink-2: #3a3a3a; --color-muted: #666666;
   --color-rule: #e0e0e0; --color-on-dark: #ffffff; --color-on-dark-2: #bcbcbc;
   --color-accent: #e63246; --color-accent-deep: #cf283b; --color-accent-ink: #ffffff; --color-focus: #4b6eb9;

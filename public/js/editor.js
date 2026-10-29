@@ -28,7 +28,7 @@
     app.innerHTML = `
       <header class="ed-bar"><a class="ed-logo" href="#/">Политех. <b>Редактор</b></a><button type="button" data-act="menu" aria-expanded="false">Меню</button></header>
       <nav class="ed-nav" aria-label="Разделы">
-        <a class="ed-logo" href="#/">Политех. <b>Выжить и выпуститься</b><small>редактор ответов</small></a>
+        <a class="ed-logo" href="#/">Политех.<b>Ответы</b><small>редактор ответов</small></a>
         <ul class="ed-menu"></ul>
         <div class="ed-work"></div>
         <div class="ed-me"></div>
