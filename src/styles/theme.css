@@ -22,8 +22,8 @@
 /* Gilroy — шрифт брендбука, веб-лицензия куплена отдельно. Файлы НЕ в репозитории (он открытый, лицензия запрещает
    раздавать шрифт): лежат только на сервере в /srv/rozb-faq/fonts/gilroy/, выкладка их не трогает (rozb-faq-pull).
    Нет файлов (локально, превью) — заголовки остаются в Montserrat. */
-@font-face { font-family: "Gilroy"; src: url("/fonts/gilroy/Gilroy-SemiBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
-@font-face { font-family: "Gilroy"; src: url("/fonts/gilroy/Gilroy-Bold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Gilroy"; src: url("/fonts/Gilroy-SemiBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Gilroy"; src: url("/fonts/Gilroy-Bold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
 
 /* Стиль Московского Политеха: чёрный и белый как основа, красный акцент, синие ссылки, доп. цвета — на этапах.
    Значения — tokens.css (из брендбука и CSS mospolytech.ru). Логотип вуза не используется: сайт неофициальный.
