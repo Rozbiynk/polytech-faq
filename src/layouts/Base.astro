@@ -7,7 +7,8 @@ import { site } from "../site.config";
 interface Props { title?: string; description?: string; root: string; noindex?: boolean }
 const { title, description = site.tagline, root, noindex = false } = Astro.props;
 const fullTitle = title ? `${title} — ${site.name}` : site.name;
-const canonical = new URL(Astro.url.pathname.replace(/\/$/, "/index.html"), site.url).href;
+// адреса без .html: /q/slug, главная — /
+const canonical = new URL(Astro.url.pathname.replace(/\.html$/, "").replace(/(^|\/)index$/, "/"), site.url).href;
 const ogImage = new URL("/og.png", site.url).href;
 ---
 <html lang="ru">
@@ -36,16 +37,16 @@ const ogImage = new URL("/og.png", site.url).href;
     <header class="top">
       <div class="container top__row">
         <div class="top__brand">
-          <a class="logo" href="/index.html">Политех.<b>Ответы</b></a>
+          <a class="logo" href="/">Политех.<b>Ответы</b></a>
           <span class="top__note">{site.note}</span>
         </div>
         <nav class="top__nav" aria-label="Разделы">
           <!-- поиск с любой страницы: «Все вопросы» открываются с полем поиска в фокусе -->
-          <a class="top__search" href="/questions.html#search" aria-label="Поиск по вопросам">
+          <a class="top__search" href="/questions#search" aria-label="Поиск по вопросам">
             <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m15.5 15.5 5 5" /></svg>
             <span class="top__search-text">Все вопросы</span>
           </a>
-          <a class="btn btn--light" href="/about.html">О проекте</a>
+          <a class="btn btn--light" href="/about">О проекте</a>
         </nav>
       </div>
     </header>

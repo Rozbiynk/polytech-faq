@@ -23,7 +23,7 @@ const popular = site.popular.map((id) => all.find((a) => a.id === id)).filter(Bo
       </div>
       <div class="popular">
         <span class="popular__label">Часто ищут</span>
-        <ul>{popular.map((a) => <li><a href={`/q/${a!.id}.html`}>{a!.data.title} <span aria-hidden="true">→</span></a></li>)}</ul>
+        <ul>{popular.map((a) => <li><a href={`/q/${a!.id}`}>{a!.data.title} <span aria-hidden="true">→</span></a></li>)}</ul>
       </div>
     </div>
 
@@ -34,7 +34,7 @@ const popular = site.popular.map((id) => all.find((a) => a.id === id)).filter(Bo
           .filter(({ n }) => n > 0) /* пустой этап не показываем, его страница остаётся */
           .map(({ s }) => {
           return (
-            <a class={`stage c-${s.slug}`} href={`/stage/${s.slug}.html`}>
+            <a class={`stage c-${s.slug}`} href={`/stage/${s.slug}`}>
               <strong>{s.title}</strong>
               <span>{s.desc}</span>
               <span class="stage__go" aria-hidden="true">→</span>
@@ -55,7 +55,7 @@ const popular = site.popular.map((id) => all.find((a) => a.id === id)).filter(Bo
           .map((t) => <button type="button" class="tab" data-topic={t.slug} aria-pressed="false">{t.title}</button>)}
       </div>
       <QuestionList items={byPeople} limit={10} />
-      <a class="btn more" href="/questions.html">Все вопросы ({all.length}) →</a>
+      <a class="btn more" href="/questions">Все вопросы ({all.length}) →</a>
     </div>
   </section>
 
@@ -65,7 +65,7 @@ const popular = site.popular.map((id) => all.find((a) => a.id === id)).filter(Bo
       {topics.map((t) => ({ t, n: all.filter((a) => topicOf(a.id, a.data.stages) === t.slug).length }))
         .filter(({ n }) => n > 0)
         .map(({ t, n }) => (
-          <li><a href={`/questions.html#${t.slug}`}>
+          <li><a href={`/questions#${t.slug}`}>
             <strong>{t.title}</strong>
             <span>{t.desc}</span>
             <span class="topics__n num">{n}</span>

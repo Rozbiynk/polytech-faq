@@ -14,8 +14,8 @@ export async function getStaticPaths() {
 const { a, to } = Astro.props;
 if (to) return new Response(
   `<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="robots" content="noindex">` +
-  `<meta http-equiv="refresh" content="0; url=${to}.html"><link rel="canonical" href="${new URL(`/q/${to}.html`, Astro.site)}">` +
-  `<title>Статья переехала</title></head><body><p>Статья переехала: <a href="${to}.html">открыть</a>.</p></body></html>`,
+  `<meta http-equiv="refresh" content="0; url=${to}"><link rel="canonical" href="${new URL(`/q/${to}`, Astro.site)}">` +
+  `<title>Статья переехала</title></head><body><p>Статья переехала: <a href="${to}">открыть</a>.</p></body></html>`,
   { headers: { "Content-Type": "text/html; charset=utf-8" } });
 const { Content } = await render(a!);
 const d = a!.data;
@@ -34,9 +34,9 @@ const related = (await getCollection("articles"))
 <Base title={d.title} root="../" description={`${d.title} Ответ для студентов и абитуриентов Московского Политеха.`}>
   <article class="article" data-pagefind-body>
     <header class="article__head">
-      <a class="crumb" href={`/questions.html#${topic}`} data-pagefind-ignore>← {topicBySlug[topic].title}</a>
+      <a class="crumb" href={`/questions#${topic}`} data-pagefind-ignore>← {topicBySlug[topic].title}</a>
       <div class="tags">
-        {d.stages.map((s) => <a class={`chip c-${s}`} href={`/stage/${s}.html`} data-pagefind-ignore>{stageBySlug[s].title}</a>)}
+        {d.stages.map((s) => <a class={`chip c-${s}`} href={`/stage/${s}`} data-pagefind-ignore>{stageBySlug[s].title}</a>)}
         <span class={`pill ${d.status}`} data-pagefind-ignore>{statuses[d.status].label}</span>
         {d.actual && <span class="pill actual" data-pagefind-ignore>{d.actual}</span>}
       </div>

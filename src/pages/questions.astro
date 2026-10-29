@@ -14,7 +14,7 @@ const groups = topics.map((t) => ({ t, items: all.filter((a) => topicOf(a.id, a.
 ---
 <Base title="Все вопросы" root="./" description="Все ответы для студентов и абитуриентов Московского Политеха: поиск, этапы и темы.">
   <section class="allq__head">
-    <a class="crumb" href="/index.html">← Главная</a>
+    <a class="crumb" href="/">← Главная</a>
     <h1>Все вопросы</h1>
     <p class="lead">Найдите ответ своими словами или выберите этап.</p>
     <div class="searchbox"><Search /></div>
@@ -22,8 +22,8 @@ const groups = topics.map((t) => ({ t, items: all.filter((a) => topicOf(a.id, a.
 
   <section class="allq" aria-label="Вопросы по темам">
     <div class="filter" role="group" aria-label="Этап">
-      <a class="chip filter__chip" href="/questions.html" data-stage="" aria-current="true">Все</a>
-      {stages.map((s) => <a class="chip filter__chip" href={`/stage/${s.slug}.html`} data-stage={s.slug}>{s.title}</a>)}
+      <a class="chip filter__chip" href="/questions" data-stage="" aria-current="true">Все</a>
+      {stages.map((s) => <a class="chip filter__chip" href={`/stage/${s.slug}`} data-stage={s.slug}>{s.title}</a>)}
     </div>
     <p class="filter__count" aria-live="polite">Вопросов: <span class="num" data-count>{all.length}</span></p>
 

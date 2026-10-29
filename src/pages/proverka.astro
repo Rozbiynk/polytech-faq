@@ -41,7 +41,7 @@ const n = (s: string) => all.filter((a) => a.data.status === s).length;
             <span class={`pill ${a.data.status}`}>{statuses[a.data.status].label}</span>
             {a.data.risk === 3 && <span class="pill risk3">{riskLabels[3]}</span>}
           </div>
-          <h2><a href={`/q/${a.id}.html`}>{a.data.title}</a></h2>
+          <h2><a href={`/q/${a.id}`}>{a.data.title}</a></h2>
           <p class="review__src">
             Источник: {a.data.sources.length
               ? a.data.sources.map((s, i) => <>{i > 0 && ", "}<a href={s.url} target="_blank" rel="noopener">{s.title}</a></>)

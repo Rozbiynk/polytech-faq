@@ -13,12 +13,12 @@ const items = (await getCollection("articles", (a) => a.data.stages.includes(sta
 ---
 <Base title={stage.title} root="../">
   <section class={`banner c-${stage.slug}`}>
-    <a class="crumb" href="/index.html">← Главная</a>
+    <a class="crumb" href="/">← Главная</a>
     <h1>{stage.title}</h1>
     <p class="lead">{stage.desc}</p>
   </section>
   {items.length
     ? <QuestionList items={items} />
     : <p class="empty">Здесь пока нет ответов: в разобранных чатах об этом спрашивали редко. Если у вас есть вопрос по теме, напишите в «О проекте».</p>}
-  <a class="btn more" href={`/questions.html?stage=${stage.slug}`}>Все вопросы по темам →</a>
+  <a class="btn more" href={`/questions?stage=${stage.slug}`}>Все вопросы по темам →</a>
 </Base>

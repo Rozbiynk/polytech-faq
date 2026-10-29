@@ -64,7 +64,7 @@
     app.querySelector(".ed-work").innerHTML = mine.length
       ? `<h2>Сейчас в работе</h2><ul>${mine.map(([s, d]) => `<li><a href="#/q/${s}"${s === cur ? ' aria-current="page"' : ""}>${esc(d.title || s)}</a></li>`).join("")}</ul>` : "";
     app.querySelector(".ed-me").innerHTML = `<b>${esc(me.name)}</b><span>${me.role === "admin" ? "администратор" : "редактор"}</span>
-      <a href="#/settings">${me.role === "admin" ? "Редакторы и приглашения" : "Настройки"}</a><a href="/index.html">Открыть сайт</a>`;
+      <a href="#/settings">${me.role === "admin" ? "Редакторы и приглашения" : "Настройки"}</a><a href="/">Открыть сайт</a>`;
   }
 
   const main = () => document.getElementById("main");
@@ -189,7 +189,7 @@
       <div class="ed-doc">
         <div class="ed-col ed-main-col">
           <div class="ed-sheet">
-            <div class="ed-toggles"><span class="tag ${f.status}">${STATUS[f.status]}</span>${f.risk === 3 ? `<span class="tag risk3">цена ошибки: ${RISKS[3]}</span>` : ""}${ed.exists ? `<a class="tag" href="/q/${ed.slug}.html" target="_blank" rel="noopener">на сайте ↗</a>` : ""}</div>
+            <div class="ed-toggles"><span class="tag ${f.status}">${STATUS[f.status]}</span>${f.risk === 3 ? `<span class="tag risk3">цена ошибки: ${RISKS[3]}</span>` : ""}${ed.exists ? `<a class="tag" href="/q/${ed.slug}" target="_blank" rel="noopener">на сайте ↗</a>` : ""}</div>
             <textarea class="ed-title" data-f="title" rows="2" placeholder="Вопрос так, как его задают: «Когда заселение в общежитие?»" aria-label="Вопрос">${esc(f.title)}</textarea>
             <p class="ed-hint">${f.stages.map((s) => STAGE[s]).join(" / ") || "Этап не выбран"}</p>
           </div>
@@ -387,7 +387,7 @@
     main().innerHTML = `<div class="ed-head"><h1>Проверка</h1></div>
       <section class="ed-sheet"><h2>Правки ждут проверки</h2><p class="ed-hint">${me.role === "admin" ? "Откройте, прочитайте и нажмите «Опубликовать»." : "Их публикует администратор."}</p>
         <ul class="ed-list">${wait.map(([s, d]) => `<li><a class="row" href="#/q/${s}"><strong>${esc(d.title || s)}</strong><span class="meta">${esc(d.author)} · ${when(d.updated)}${d.new ? " · новая статья" : ""}</span></a></li>`).join("") || `<li class="row ed-hint">Нет правок на проверке</li>`}</ul></section>
-      <section class="ed-sheet"><h2>Отметки активистов</h2><p class="ed-hint">Со страницы <a href="/proverka.html">proverka.html</a>: «всё верно» или замечание.</p>
+      <section class="ed-sheet"><h2>Отметки активистов</h2><p class="ed-hint">Со страницы <a href="/proverka">faq.rozb.pw/proverka</a>: «всё верно» или замечание.</p>
         <ul class="ed-list">${ib.reviews.map((r) => `<li><a class="row" href="#/q/${r.slug}"><strong>${esc(titleOf(r.slug))}</strong><span class="meta">${esc(r.name || "без имени")} · ${date(r.t)}</span><span class="side"><span class="tag ${r.ok ? "verified" : "work"}">${r.ok ? "всё верно" : "замечание"}</span></span>${r.note ? `<span class="text">${esc(r.note)}</span>` : ""}</a></li>`).join("") || `<li class="row ed-hint">Пока нет</li>`}</ul></section>`;
     nav("review");
   }
@@ -461,7 +461,7 @@
   }
 
   function gate(text) {
-    app.innerHTML = `<section class="ed-gate"><h1>Редактор ответов</h1><p>${text}</p><p class="ed-hint">Сайт: <a href="/index.html">faq.rozb.pw</a></p></section>`;
+    app.innerHTML = `<section class="ed-gate"><h1>Редактор ответов</h1><p>${text}</p><p class="ed-hint">Сайт: <a href="/">faq.rozb.pw</a></p></section>`;
   }
 
   async function boot() {
