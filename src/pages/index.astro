@@ -3,7 +3,7 @@ import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import Search from "../components/Search.astro";
 import QuestionList from "../components/QuestionList.astro";
-import { site, stages } from "../site.config";
+import { site, stages, topics, topicOf } from "../site.config";
 
 const all = await getCollection("articles");
 const byPeople = [...all].sort((a, b) => (b.data.people ?? 0) - (a.data.people ?? 0));
@@ -42,6 +42,24 @@ const popular = site.popular.map((id) => all.find((a) => a.id === id)).filter(Bo
 
   <section class="section split">
     <h2>Чаще всего спрашивают</h2>
-    <QuestionList items={byPeople.slice(0, 10)} />
+    <div class="split__body">
+      <QuestionList items={byPeople.slice(0, 10)} />
+      <a class="btn more" href="/questions.html">Все вопросы ({all.length}) →</a>
+    </div>
+  </section>
+
+  <section class="section split" aria-labelledby="topics-h">
+    <h2 id="topics-h">Вопросы по темам</h2>
+    <ul class="topics">
+      {topics.map((t) => ({ t, n: all.filter((a) => topicOf(a.id, a.data.stages) === t.slug).length }))
+        .filter(({ n }) => n > 0)
+        .map(({ t, n }) => (
+          <li><a href={`/questions.html#${t.slug}`}>
+            <strong>{t.title}</strong>
+            <span>{t.desc}</span>
+            <span class="topics__n num">{n}</span>
+          </a></li>
+        ))}
+    </ul>
   </section>
 </Base>

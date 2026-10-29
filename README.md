@@ -9,7 +9,7 @@
 |---|---|---|
 | Статьи (1 вопрос = 1 файл) | `src/content/articles/*.md` | нет |
 | Схема статьи (поля frontmatter) | `src/content.config.ts` | нет |
-| Название, этапы, статусы | `src/site.config.ts` | нет |
+| Название, этапы, темы, статусы | `src/site.config.ts` | нет |
 | **Внешний вид** (цвета, шрифты, отступы) | `src/styles/theme.css` | да — главный файл |
 | Разметка блоков | `src/components/*.astro`, `src/layouts/Base.astro` | по желанию |
 | Страницы (главная, этап, статья, о проекте) | `src/pages/` | по желанию |
@@ -29,6 +29,9 @@ people: 91                  # сколько человек спрашивали
 aliases: [...]              # формулировки из чата — не видны, но по ним ищет поиск
 tips: [...]                 # «что говорят студенты» — отдельно от фактов
 ```
+Тема статьи (Поступление, Учёба и кампус, Деньги…) — не во frontmatter, а в `topicMap` в `src/site.config.ts`:
+редактор /edit незнакомые поля не сохраняет. Статья, которой нет в `topicMap`, получает тему по первому этапу.
+
 Под frontmatter — сам ответ в Markdown. Черновики делает `../gen_articles.py` из `../shortlist/shortlist.json`
 (`--top 40`; существующие файлы не перезаписывает).
 
@@ -61,6 +64,10 @@ pnpm build      # → dist/
 pnpm preview    # посмотреть сборку
 ./deploy.sh     # проверить сборку и отправить в GitHub (выкладка сама)
 ```
+**Gilroy** (заголовки) — по своей веб-лицензии, файлов в репозитории нет: `public/fonts/gilroy/` в `.gitignore`.
+На сервере — `/srv/rozb-faq/fonts/gilroy/Gilroy-SemiBold.woff2` и `Gilroy-Bold.woff2` (см. `../server/README.md`),
+локально — положить те же файлы в `public/fonts/gilroy/`. Без них заголовки в Montserrat.
+
 CSP сервера строгий: без inline-скриптов и стилей, шрифты только свои (`@fontsource`), wasm для Pagefind разрешён.
 Поэтому скрипты — в `public/js/`, CSS — файлами, `assetsInlineLimit: 0`.
 Превью в Claude Artifact: скопировать `dist/` без `pagefind/` в `~/Общее/polytech-faq/preview/` и опубликовать.

@@ -4,7 +4,7 @@ import { site, stages } from "../site.config";
 // Карта сайта для поисковиков: главная, «О проекте», этапы и все статьи.
 export async function GET() {
   const articles = await getCollection("articles");
-  const urls = ["/index.html", "/about.html", ...stages.map((s) => `/stage/${s.slug}.html`), ...articles.map((a) => `/q/${a.id}.html`)];
+  const urls = ["/index.html", "/questions.html", "/about.html", ...stages.map((s) => `/stage/${s.slug}.html`), ...articles.map((a) => `/q/${a.id}.html`)];
   const lastmod = (id: string) => articles.find((a) => `/q/${a.id}.html` === id)?.data.checked?.toISOString().slice(0, 10);
   const body = urls.map((u) => {
     const d = lastmod(u);

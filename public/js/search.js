@@ -11,6 +11,8 @@
   const base = new URL(root + "pagefind/", location.href).href;
   const box = document.getElementById("search");
   const hint = box.dataset.hint;
+  // из лупы в шапке приходят по ссылке …#search — сразу ставим курсор в поле
+  const focus = location.hash === "#search";
 
   // Основной поиск — Pagefind (полнотекстовый, с морфологией). Если его файлов нет — простой поиск по search.json.
   const s = document.createElement("script");
@@ -22,7 +24,7 @@
     box.textContent = "";
     new PagefindUI({
       element: "#search", bundlePath: base, showImages: false, showSubResults: false, resetStyles: false,
-      translations: { placeholder: hint },
+      translations: { placeholder: hint }, autofocus: focus,
       // Pagefind отдаёт адреса от корня сайта; делаем их относительными к текущей странице
       processResult: (r) => {
         r.url = root + r.url.replace(/^\//, "");
@@ -50,6 +52,7 @@
     box.innerHTML = '<input id="q" class="qinput" type="search" autocomplete="off"><ul class="qlist results"></ul>';
     const input = box.querySelector("#q"), out = box.querySelector(".results");
     input.placeholder = hint;
+    if (focus) input.focus();
     let items = [];
     try { items = await (await fetch(root + "search.json")).json(); } catch { return; }
     // грубая «морфология»: сравниваем первые 5 букв слов, ё = е

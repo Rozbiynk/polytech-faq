@@ -19,9 +19,15 @@
 @font-face { font-family: "DejaVu Sans Web"; src: url("../fonts/DejaVuSans-Bold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
 @font-face { font-family: "DejaVu Sans Web"; src: url("../fonts/DejaVuSans-Oblique.woff2") format("woff2"); font-weight: 400; font-style: italic; font-display: swap; }
 
+/* Gilroy — шрифт брендбука, веб-лицензия куплена отдельно. Файлы НЕ в репозитории (он открытый, лицензия запрещает
+   раздавать шрифт): лежат только на сервере в /srv/rozb-faq/fonts/gilroy/, выкладка их не трогает (rozb-faq-pull).
+   Нет файлов (локально, превью) — заголовки остаются в Montserrat. */
+@font-face { font-family: "Gilroy"; src: url("/fonts/gilroy/Gilroy-SemiBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Gilroy"; src: url("/fonts/gilroy/Gilroy-Bold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+
 /* Стиль Московского Политеха: чёрный и белый как основа, красный акцент, синие ссылки, доп. цвета — на этапах.
    Значения — tokens.css (из брендбука и CSS mospolytech.ru). Логотип вуза не используется: сайт неофициальный.
-   Шрифт заголовков — Montserrat вместо Gilroy (лицензия Gilroy вуза не разрешает веб-размещение третьими лицами). */
+   Шрифт заголовков — Gilroy (своя веб-лицензия), запасной — Montserrat. */
 :root {
   --nav-h: 76px; --radius: 4px; --radius-panel: 0;
   /* размеры ближе к mospolytech.ru (текст 14–16 px, подзаголовки 24 px), но не мельче 16 px: Verdana широкая */
@@ -230,6 +236,49 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .results:empty { display: none; }
 .results .q { font-size: var(--text-md); }
 
+/* лупа в шапке: на телефоне только значок, на широком экране — со словами */
+.top__nav { display: flex; align-items: center; gap: var(--space-xs); }
+.top__search { display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 44px; min-width: 44px; justify-content: center; padding: 0 var(--space-sm); border-radius: var(--radius); color: var(--color-on-dark); text-decoration: none; font: 700 var(--text-md)/1 var(--font-display); }
+.top__search:hover { background: color-mix(in oklab, var(--color-on-dark) 12%, transparent); }
+.top__search:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.top__search svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+/* «← Главная», «← Тема» над заголовком */
+.crumb { justify-self: start; display: inline-flex; align-items: center; min-height: 44px; font-size: var(--text-sm); color: var(--color-ink-2); text-decoration: none; }
+.crumb:hover { text-decoration: underline; }
+.banner .crumb { color: inherit; min-height: 32px; }
+.checked { font-size: var(--text-sm); color: var(--color-muted); }
+
+.btn.more { justify-self: start; margin-top: var(--space-lg); }
+.split__body { display: grid; min-width: 0; }
+.page:has(> .banner) > .btn.more { margin-top: 0; }
+
+/* темы на главной: строки с числом вопросов справа */
+.topics { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xs); }
+.topics a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-2xs) var(--space-md); height: 100%; padding: var(--space-md); background: var(--color-paper); color: var(--color-ink); text-decoration: none; transition: background-color var(--dur-micro) var(--ease-out); }
+.topics a:hover { background: var(--color-paper-3); }
+.topics a:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.topics strong { font: 700 var(--text-lg)/1.25 var(--font-display); }
+.topics span:not(.topics__n) { grid-column: 1; font-size: var(--text-sm); line-height: 1.4; color: var(--color-ink-2); }
+.topics__n { grid-column: 2; grid-row: 1; font: 700 var(--text-lg)/1.25 var(--font-display); color: var(--color-muted); }
+
+/* «Все вопросы» */
+.allq__head { display: grid; gap: var(--space-md); max-width: 52rem; }
+.allq__head h1 { font-size: clamp(2rem, 2vw + 1.2rem, 3rem); }
+.allq { display: grid; gap: var(--space-lg); max-width: 64rem; }
+.filter { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.filter__chip { background: var(--color-paper); box-shadow: inset 0 0 0 1px var(--color-rule); }
+.filter__chip[aria-current="true"] { background: var(--color-ink); color: var(--color-on-dark); box-shadow: none; }
+.filter__count { font-size: var(--text-sm); color: var(--color-muted); }
+.topics-nav { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-md); font-size: var(--text-sm); }
+.topics-nav a { display: inline-flex; align-items: center; min-height: 32px; }
+.topic { display: grid; gap: var(--space-md); padding-top: var(--space-lg); scroll-margin-top: var(--space-md); }
+.topic h2 { font-size: var(--text-xl); }
+
+/* похожие вопросы под статьёй */
+.related { display: grid; gap: var(--space-md); max-width: 52rem; }
+.related h2 { font-size: var(--text-xl); }
+
 /* телефон и планшет */
 @media (max-width: 60rem) {
   :root { --nav-h: 64px; }
@@ -250,6 +299,9 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
   .logo, .top .btn { font-size: var(--text-xs); }
   .top__note { font-size: var(--text-xs); }
   .stage { min-height: 88px; padding: var(--space-sm); }
+  .top__search-text { display: none; }
+  .top__search { padding: 0; }
+  .topics { grid-template-columns: minmax(0, 1fr); }
   .stage strong { font-size: var(--text-md); }
   .block--answer { padding: var(--space-lg) var(--space-md); }
   .answer { font-size: var(--text-md); }
@@ -264,7 +316,7 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
   .qlist a { padding-block: var(--space-md); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .btn, .chip, .stage, .qlist a { transition: none; }
+  .btn, .chip, .stage, .qlist a, .topics a { transition: none; }
   .btn:active, .chip:active, .stage:active { transform: none; }
 }
 .band .qinput { background: transparent; color: var(--color-on-dark); border-color: color-mix(in oklab, var(--color-on-dark) 50%, var(--color-ink)); }

@@ -1,0 +1,43 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import Search from "../components/Search.astro";
+import QuestionList from "../components/QuestionList.astro";
+import { stages, topics, topicOf } from "../site.config";
+
+// Все вопросы: поиск, фильтр по этапу (public/js/questions.js) и список по темам.
+// Без JS фильтр — обычные ссылки на страницы этапов, список показан целиком.
+const all = (await getCollection("articles"))
+  .sort((a, b) => b.data.risk - a.data.risk || (b.data.people ?? 0) - (a.data.people ?? 0));
+const groups = topics.map((t) => ({ t, items: all.filter((a) => topicOf(a.id, a.data.stages) === t.slug) }))
+  .filter((g) => g.items.length > 0);
+---
+<Base title="Все вопросы" root="./" description="Все ответы для студентов и абитуриентов Московского Политеха: поиск, этапы и темы.">
+  <section class="allq__head">
+    <a class="crumb" href="/index.html">← Главная</a>
+    <h1>Все вопросы</h1>
+    <p class="lead">Найдите ответ своими словами или выберите этап.</p>
+    <div class="searchbox"><Search /></div>
+  </section>
+
+  <section class="allq" aria-label="Вопросы по темам">
+    <div class="filter" role="group" aria-label="Этап">
+      <a class="chip filter__chip" href="/questions.html" data-stage="" aria-current="true">Все</a>
+      {stages.map((s) => <a class="chip filter__chip" href={`/stage/${s.slug}.html`} data-stage={s.slug}>{s.title}</a>)}
+    </div>
+    <p class="filter__count" aria-live="polite">Вопросов: <span class="num" data-count>{all.length}</span></p>
+
+    <nav class="topics-nav" aria-label="Темы">
+      {groups.map(({ t }) => <a href={`#${t.slug}`} data-topic-link={t.slug}>{t.title}</a>)}
+    </nav>
+
+    {groups.map(({ t, items }) => (
+      <section class="topic" id={t.slug} data-topic={t.slug} aria-labelledby={`h-${t.slug}`}>
+        <h2 id={`h-${t.slug}`}>{t.title}</h2>
+        <QuestionList items={items} />
+      </section>
+    ))}
+    <p class="empty" data-none hidden>На этом этапе вопросов пока нет.</p>
+  </section>
+  <script is:inline src="/js/questions.js" defer></script>
+</Base>
