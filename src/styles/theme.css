@@ -230,6 +230,49 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .results:empty { display: none; }
 .results .q { font-size: var(--text-md); }
 
+/* лупа в шапке: на телефоне только значок, на широком экране — со словами */
+.top__nav { display: flex; align-items: center; gap: var(--space-xs); }
+.top__search { display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 44px; min-width: 44px; justify-content: center; padding: 0 var(--space-sm); border-radius: var(--radius); color: var(--color-on-dark); text-decoration: none; font: 700 var(--text-md)/1 var(--font-display); }
+.top__search:hover { background: color-mix(in oklab, var(--color-on-dark) 12%, transparent); }
+.top__search:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.top__search svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+/* «← Главная», «← Тема» над заголовком */
+.crumb { justify-self: start; display: inline-flex; align-items: center; min-height: 44px; font-size: var(--text-sm); color: var(--color-ink-2); text-decoration: none; }
+.crumb:hover { text-decoration: underline; }
+.banner .crumb { color: inherit; min-height: 32px; }
+.checked { font-size: var(--text-sm); color: var(--color-muted); }
+
+.btn.more { justify-self: start; margin-top: var(--space-lg); }
+.split__body { display: grid; min-width: 0; }
+.page:has(> .banner) > .btn.more { margin-top: 0; }
+
+/* темы на главной: строки с числом вопросов справа */
+.topics { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xs); }
+.topics a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-2xs) var(--space-md); height: 100%; padding: var(--space-md); background: var(--color-paper); color: var(--color-ink); text-decoration: none; transition: background-color var(--dur-micro) var(--ease-out); }
+.topics a:hover { background: var(--color-paper-3); }
+.topics a:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.topics strong { font: 700 var(--text-lg)/1.25 var(--font-display); }
+.topics span:not(.topics__n) { grid-column: 1; font-size: var(--text-sm); line-height: 1.4; color: var(--color-ink-2); }
+.topics__n { grid-column: 2; grid-row: 1; font: 700 var(--text-lg)/1.25 var(--font-display); color: var(--color-muted); }
+
+/* «Все вопросы» */
+.allq__head { display: grid; gap: var(--space-md); max-width: 52rem; }
+.allq__head h1 { font-size: clamp(2rem, 2vw + 1.2rem, 3rem); }
+.allq { display: grid; gap: var(--space-lg); max-width: 64rem; }
+.filter { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.filter__chip { background: var(--color-paper); box-shadow: inset 0 0 0 1px var(--color-rule); }
+.filter__chip[aria-current="true"] { background: var(--color-ink); color: var(--color-on-dark); box-shadow: none; }
+.filter__count { font-size: var(--text-sm); color: var(--color-muted); }
+.topics-nav { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-md); font-size: var(--text-sm); }
+.topics-nav a { display: inline-flex; align-items: center; min-height: 32px; }
+.topic { display: grid; gap: var(--space-md); padding-top: var(--space-lg); scroll-margin-top: var(--space-md); }
+.topic h2 { font-size: var(--text-xl); }
+
+/* похожие вопросы под статьёй */
+.related { display: grid; gap: var(--space-md); max-width: 52rem; }
+.related h2 { font-size: var(--text-xl); }
+
 /* телефон и планшет */
 @media (max-width: 60rem) {
   :root { --nav-h: 64px; }
@@ -250,6 +293,9 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
   .logo, .top .btn { font-size: var(--text-xs); }
   .top__note { font-size: var(--text-xs); }
   .stage { min-height: 88px; padding: var(--space-sm); }
+  .top__search-text { display: none; }
+  .top__search { padding: 0; }
+  .topics { grid-template-columns: minmax(0, 1fr); }
   .stage strong { font-size: var(--text-md); }
   .block--answer { padding: var(--space-lg) var(--space-md); }
   .answer { font-size: var(--text-md); }
@@ -264,7 +310,7 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
   .qlist a { padding-block: var(--space-md); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .btn, .chip, .stage, .qlist a { transition: none; }
+  .btn, .chip, .stage, .qlist a, .topics a { transition: none; }
   .btn:active, .chip:active, .stage:active { transform: none; }
 }
 .band .qinput { background: transparent; color: var(--color-on-dark); border-color: color-mix(in oklab, var(--color-on-dark) 50%, var(--color-ink)); }

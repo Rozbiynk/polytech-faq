@@ -19,6 +19,38 @@ export const stages = [
 
 export const stageBySlug = Object.fromEntries(stages.map((s) => [s.slug, s]));
 
+// Темы — вторая ось навигации («Все вопросы», главная, «← тема» в статье). У статьи одна тема.
+export const topics = [
+  { slug: "admission", title: "Поступление", desc: "Документы, экзамены, приоритеты, списки, зачисление" },
+  { slug: "study", title: "Учёба", desc: "Начало занятий, расписание, учебный план, практика" },
+  { slug: "documents", title: "Документы и сервисы", desc: "Личный кабинет, пропуск, студенческий, справки" },
+  { slug: "money", title: "Деньги", desc: "Стипендии, оплата обучения" },
+  { slug: "dorm", title: "Общежитие", desc: "Заселение, справки, условия и цены" },
+  { slug: "support", title: "Здоровье и поддержка", desc: "Медсправки, отсрочка, куда обращаться" },
+  { slug: "career", title: "Работа и возможности", desc: "Проекты, стажировки, помощь с работой" },
+  { slug: "change", title: "Смена планов и выпуск", desc: "Академ, перевод, отчисление, диплом" },
+] as const;
+export type TopicSlug = (typeof topics)[number]["slug"];
+export const topicBySlug = Object.fromEntries(topics.map((t) => [t.slug, t]));
+
+// Тема статьи — по имени файла. Новые статьи, которых здесь нет, получают тему по первому этапу (topicOf).
+const topicMap: Record<string, TopicSlug> = {
+  "academic-leave": "change", "change-program": "change", "expulsion": "change", "transfer-from-another-university": "change",
+  "before-graduation": "change", "diploma-duplicate": "change", "school-certificate-back": "change",
+  "first-year-start": "study", "schedule": "study", "study-plan": "study", "internship": "study",
+  "applicant-account": "admission", "upload-passport-scan": "admission", "medical-certificate-086": "admission",
+  "student-account": "documents", "student-id": "documents", "magnetic-pass": "documents", "study-certificates": "documents",
+  "scholarship": "money", "tuition-payment": "money",
+  "dermatology-certificate": "dorm",
+  "army-deferment": "support", "contacts": "support",
+  "career-center": "career", "project-activity": "career",
+};
+const topicByStage: Record<string, TopicSlug> = {
+  apply: "admission", "first-year": "study", study: "study", live: "dorm", change: "change", graduate: "change",
+};
+export const topicOf = (id: string, stages: readonly string[]): TopicSlug =>
+  topicMap[id] ?? (id.startsWith("dorm-") ? "dorm" : topicByStage[stages[0]] ?? "study");
+
 export const statuses = {
   draft: { label: "Черновик", note: "Собрано из ответов в чатах и не проверено. Сверяйте с официальными источниками." },
   sourced: { label: "По сайту вуза", note: "Ответ составлен по официальным страницам университета (ссылки ниже), редактор его ещё не подтвердил. Сроки меняются каждый год: сверяйтесь с источником." },

@@ -7,7 +7,7 @@ const { items } = Astro.props;
 ---
 <ul class="qlist">
   {items.map((a) => (
-    <li>
+    <li data-stages={a.data.stages.join(" ")}>
       <a href={`/q/${a.id}.html`}>
         <span class="q">{a.data.title}</span>
         <span class={`pill ${a.data.status}`}>{statuses[a.data.status].label}</span>

@@ -2,7 +2,8 @@
 import { getCollection, render } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import Feedback from "../../components/Feedback.astro";
-import { stageBySlug, statuses, riskLabels, redirects } from "../../site.config";
+import QuestionList from "../../components/QuestionList.astro";
+import { stageBySlug, statuses, riskLabels, redirects, topicBySlug, topicOf } from "../../site.config";
 
 export async function getStaticPaths() {
   const pages = (await getCollection("articles")).map((a) => ({ params: { slug: a.id }, props: { a, to: undefined } }));
@@ -19,15 +20,27 @@ if (to) return new Response(
 const { Content } = await render(a!);
 const d = a!.data;
 const fmt = (x: Date) => x.toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
+const topic = topicOf(a!.id, d.stages);
+
+// Похожие: та же тема важнее общих этапов, при равенстве — о чём чаще спрашивали
+const shared = (b: typeof a) => b!.data.stages.filter((s) => d.stages.includes(s)).length;
+const related = (await getCollection("articles"))
+  .filter((b) => b.id !== a!.id)
+  .map((b) => ({ b, score: (topicOf(b.id, b.data.stages) === topic ? 2 : 0) + shared(b) }))
+  .filter((x) => x.score > 0)
+  .sort((x, y) => y.score - x.score || (y.b.data.people ?? 0) - (x.b.data.people ?? 0))
+  .slice(0, 4).map((x) => x.b);
 ---
 <Base title={d.title} root="../" description={`${d.title} Ответ для студентов и абитуриентов Московского Политеха.`}>
   <article class="article" data-pagefind-body>
     <header class="article__head">
+      <a class="crumb" href={`/questions.html#${topic}`} data-pagefind-ignore>← {topicBySlug[topic].title}</a>
       <div class="tags">
         {d.stages.map((s) => <a class={`chip c-${s}`} href={`/stage/${s}.html`} data-pagefind-ignore>{stageBySlug[s].title}</a>)}
         <span class={`pill ${d.status}`} data-pagefind-ignore>{statuses[d.status].label}</span>
         {d.actual && <span class="pill actual" data-pagefind-ignore>{d.actual}</span>}
       </div>
+      {d.checked && <p class="checked" data-pagefind-ignore>{{ verified: "Проверено", sourced: "Сверено с сайтом вуза", draft: "Обновлено" }[d.status]} <time datetime={d.checked.toISOString().slice(0, 10)}>{fmt(d.checked)}</time></p>}
       <h1>{d.title}</h1>
       <p class={`notice ${d.status}`} data-pagefind-ignore>{statuses[d.status].note}</p>
     </header>
@@ -64,4 +77,10 @@ const fmt = (x: Date) => x.toLocaleDateString("ru-RU", { day: "numeric", month: 
     <div hidden>{d.aliases.join(" · ")}</div>
   </article>
   <Feedback slug={a!.id} />
+  {related.length > 0 && (
+    <section class="related" aria-labelledby="related-h">
+      <h2 id="related-h">Похожие вопросы</h2>
+      <QuestionList items={related} />
+    </section>
+  )}
 </Base>
