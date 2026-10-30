@@ -8,6 +8,9 @@
     sent.add(q);
     fetch("/api/miss", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ q }) }).catch(() => {});
   };
+  // разговорные слова ищем как официальные: «физра» и «физкультура» должны давать одну и ту же выдачу
+  const slang = [[/(^|[^а-яё])физ-?р[а-яё]*/gi, "$1физкультура"], [/(^|[^а-яё])общаг[а-яё]*/gi, "$1общежитие"], [/(^|[^а-яё])стипух[а-яё]*/gi, "$1стипендия"]];
+  const plain = (q) => slang.reduce((t, [re, to]) => t.replace(re, to), q);
   const base = new URL(root + "pagefind/", location.href).href;
   const box = document.getElementById("search");
   const hint = box.dataset.hint;
@@ -32,6 +35,7 @@
     const ui = new PagefindUI({
       element: "#search", bundlePath: base, showImages: false, showSubResults: false, resetStyles: false,
       translations: { placeholder: hint }, autofocus: focus,
+      processTerm: plain,
       // Pagefind отдаёт адреса от корня сайта; делаем их относительными к текущей странице
       processResult: (r) => {
         r.url = root + r.url.replace(/^\//, "").replace(/\.html$/, "");   // адреса без .html
@@ -71,7 +75,7 @@
     const stems = (t) => norm(t).split(/[^a-zа-я0-9]+/).filter((w) => w.length > 1).map((w) => w.slice(0, 5));
     const idx = items.map((it) => ({ it, title: new Set(stems(it.title)), text: new Set(stems(it.text)) }));
     input.addEventListener("input", () => {
-      const q = stems(input.value);
+      const q = stems(plain(input.value));
       out.textContent = "";
       if (!q.length) return;
       const hits = idx.map((x) => ({ x, score: q.reduce((s, w) => s + (x.title.has(w) ? 3 : x.text.has(w) ? 1 : 0), 0) }))
