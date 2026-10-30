@@ -38,6 +38,8 @@
         // под заголовком — начало ответа, а не совпадение в формулировках из чатов
         const sum = r.meta && r.meta.summary;
         if (sum) r.excerpt = sum.length > 160 ? sum.slice(0, 160).replace(/\s+\S*$/, "") + "…" : sum;
+        // иначе Pagefind UI покажет весь ответ ещё раз блоком «Summary: …»
+        if (r.meta) delete r.meta.summary;
         return r;
       },
     });

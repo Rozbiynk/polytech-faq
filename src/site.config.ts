@@ -57,6 +57,8 @@ const topicMap: Record<string, TopicSlug> = {
   "student-campus-office": "dorm",
   "competency-passport": "career", "first-year-projects": "career", "own-project": "career", "student-science": "career",
   "student-communities": "career", "creative-communities": "career", "sports-club": "career", "museums": "career", "university-merch": "career",
+  "pe-credit": "study", "pe-medical-group": "study",
+  "individual-achievements": "admission", "olympiad-bvi": "admission",
 };
 const topicByStage: Record<string, TopicSlug> = {
   apply: "admission", "first-year": "study", study: "study", live: "dorm", change: "change", graduate: "change",
@@ -66,7 +68,7 @@ export const topicOf = (id: string, stages: readonly string[]): TopicSlug =>
 
 export const statuses = {
   draft: { label: "Черновик", note: "Собрано из ответов в чатах и не проверено. Сверяйте с официальными источниками." },
-  sourced: { label: "По сайту вуза", note: "Ответ составлен по официальным страницам университета (ссылки ниже), редактор его ещё не подтвердил. Сроки меняются каждый год: сверяйтесь с источником." },
+  sourced: { label: "По сайту вуза", note: "Ответ составлен по официальным страницам университета — ссылки ниже. Правила и сроки меняются каждый год: перед важным шагом откройте источник." },
   verified: { label: "Проверено", note: "Проверено редактором по официальным источникам." },
 } as const;
 
