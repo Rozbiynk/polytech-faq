@@ -5,10 +5,10 @@ import Search from "../components/Search.astro";
 import QuestionList from "../components/QuestionList.astro";
 import { stages, topics, topicOf } from "../site.config";
 
-// Все вопросы: поиск, фильтр по этапу (public/js/questions.js) и список по темам.
+// Все вопросы: поиск, фильтр по этапу (public/js/questions.js) и список по темам; порядок — по популярности, как на главной.
 // Без JS фильтр — обычные ссылки на страницы этапов, список показан целиком.
 const all = (await getCollection("articles"))
-  .sort((a, b) => b.data.risk - a.data.risk || (b.data.people ?? 0) - (a.data.people ?? 0));
+  .sort((a, b) => (b.data.people ?? 0) - (a.data.people ?? 0) || b.data.risk - a.data.risk);
 const groups = topics.map((t) => ({ t, items: all.filter((a) => topicOf(a.id, a.data.stages) === t.slug) }))
   .filter((g) => g.items.length > 0);
 ---

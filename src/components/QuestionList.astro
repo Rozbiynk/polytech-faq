@@ -13,7 +13,7 @@ const { items, limit = Infinity } = Astro.props;
         <span class="q">{a.data.title}</span>
         <span class="qlist__go" aria-hidden="true">→</span>
         <span class="badges">
-          <span class={`pill ${a.data.status}`}>{a.data.status !== "draft" && <span aria-hidden="true">✓ </span>}{statuses[a.data.status].label}</span>
+          <span class={`pill ${a.data.status}`}>{a.data.status === "verified" && <span aria-hidden="true">✓ </span>}{statuses[a.data.status].label}</span>
           {a.data.risk === 3 && <span class="pill risk">важно не ошибиться</span>}
         </span>
         {a.data.people && <span class="count num">спрашивали {a.data.people} чел.</span>}

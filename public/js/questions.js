@@ -5,6 +5,22 @@
   const groups = [...document.querySelectorAll(".topic")];
   const count = document.querySelector("[data-count]");
   const none = document.querySelector("[data-none]");
+  // смена вкладки: старый список уходит, новый въезжает снизу строка за строкой (стили — .is-leaving / .enter в theme.css)
+  const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const swap = (list, update) => {
+    if (calm) return update();
+    list.classList.add("is-leaving");
+    setTimeout(() => {
+      update();
+      list.classList.remove("is-leaving");
+      [...list.querySelectorAll("li:not([hidden])")].forEach((li, i) => {
+        li.classList.remove("enter");
+        li.style.setProperty("--i", Math.min(i, 12));
+        void li.offsetWidth;   // перезапуск анимации
+        li.classList.add("enter");
+      });
+    }, 200);
+  };
 
   const apply = (stage) => {
     if (!chips.some((c) => c.dataset.stage === stage)) stage = "";
@@ -31,7 +47,7 @@
     if (stage) url.searchParams.set("stage", stage); else url.searchParams.delete("stage");
     url.hash = "";
     history.replaceState(null, "", url);
-    apply(stage);
+    swap(document.querySelector(".allq"), () => apply(stage));
   }));
   apply(new URLSearchParams(location.search).get("stage") || "");
 })();
