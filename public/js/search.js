@@ -27,10 +27,15 @@
   // Основной поиск — Pagefind (полнотекстовый, с морфологией). Если его файлов нет — простой поиск по search.json.
   const s = document.createElement("script");
   s.src = base + "pagefind-ui.js";
+  // Поле Pagefind рисуем только после его CSS: иначе на телефоне оно на миг выходит без стилей, выше на ~80 px,
+  // и всё под ним прыгает (CLS). CSS не загрузился — всё равно показываем поиск.
   s.onload = () => {
     const css = document.createElement("link");
     css.rel = "stylesheet"; css.href = base + "pagefind-ui.css";
+    css.onload = css.onerror = mount;
     document.head.append(css);
+  };
+  const mount = () => {
     box.textContent = "";
     const ui = new PagefindUI({
       element: "#search", bundlePath: base, showImages: false, showSubResults: false, resetStyles: false,
@@ -47,6 +52,8 @@
         return r;
       },
     });
+    // у поля Pagefind только placeholder — даём ему имя для экранного диктора, как у поля-заглушки
+    box.querySelector(".pagefind-ui__search-input")?.setAttribute("aria-label", "Поиск по вопросам");
     setQuery = (q) => { ui.triggerSearch(q); box.querySelector(".pagefind-ui__search-input")?.focus(); };
     if (pending) setQuery(pending);
     let timer;
@@ -64,7 +71,7 @@
   document.head.append(s);
 
   async function fallback() {
-    box.innerHTML = '<input id="q" class="qinput" type="search" autocomplete="off"><ul class="qlist results"></ul>';
+    box.innerHTML = '<input id="q" class="qinput" type="search" autocomplete="off" aria-label="Поиск по вопросам"><ul class="qlist results"></ul>';
     const input = box.querySelector("#q"), out = box.querySelector(".results");
     input.placeholder = hint;
     if (focus) input.focus();

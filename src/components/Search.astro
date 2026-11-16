@@ -5,4 +5,7 @@ import { site } from "../site.config";
 <div id="search" class="search" data-hint={site.searchHint}>
   <input class="qinput" type="search" placeholder={site.searchHint} aria-label="Поиск по вопросам" disabled />
 </div>
+<!-- файлы Pagefind начинают качаться сразу, а не после search.js; низкий приоритет — не мешают заголовку и шрифтам -->
+<link rel="preload" href="/pagefind/pagefind-ui.css" as="style" fetchpriority="low" />
+<link rel="preload" href="/pagefind/pagefind-ui.js" as="script" fetchpriority="low" />
 <script is:inline src="/js/search.js" defer></script>
