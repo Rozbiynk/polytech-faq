@@ -6,7 +6,7 @@ import QuestionList from "../components/QuestionList.astro";
 import { site, stages, topics, topicOf } from "../site.config";
 
 const all = await getCollection("articles");
-const byPeople = [...all].sort((a, b) => (b.data.people ?? 0) - (a.data.people ?? 0));
+const byPeople = all.toSorted((a, b) => (b.data.people ?? 0) - (a.data.people ?? 0));
 const popular = site.popular.map((id) => all.find((a) => a.id === id)).filter(Boolean);
 ---
 <Base root="./">

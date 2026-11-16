@@ -337,6 +337,8 @@
   app.addEventListener("keydown", (e) => {
     if (e.target.matches("[data-alias]") && e.key === "Enter") {
       e.preventDefault();
+      // Enter, которым клавиатура (IME) подтверждает набираемое слово, — ещё не «добавить»; 229 — для Safari
+      if (e.isComposing || e.keyCode === 229) return;
       const v = e.target.value.trim();
       if (v && !ed.fields.aliases.includes(v)) { ed.fields.aliases.push(v); changed(); renderKeep("[data-alias]"); }
     }
