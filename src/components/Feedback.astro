@@ -3,7 +3,7 @@
 interface Props { slug: string }
 const { slug } = Astro.props;
 ---
-<section class="feedback" data-slug={slug} data-feedback-url="/api/feedback">
+<section class="feedback" data-slug={slug} data-feedback-url="/api/feedback" data-pagefind-ignore>
   <div class="row">
     <span class="feedback__q">Помогла ли статья?</span>
     <button class="btn" type="button" data-vote="yes">Да</button>

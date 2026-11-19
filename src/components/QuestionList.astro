@@ -11,12 +11,14 @@ const { items, limit = Infinity } = Astro.props;
     <li data-stages={a.data.stages.join(" ")} data-topic={topicOf(a)} hidden={i >= limit}>
       <a href={`/q/${a.id}`}>
         <span class="q">{a.data.title}</span>
-        <span class="qlist__go" aria-hidden="true">→</span>
-        <span class="badges">
-          <span class={`pill ${a.data.status}`}>{a.data.status === "verified" && <span aria-hidden="true">✓ </span>}{statuses[a.data.status].label}</span>
-          {a.data.risk === 3 && <span class="pill risk">важно не ошибиться</span>}
-        </span>
-        {a.data.people && <span class="count num">спрашивали {a.data.people} чел.</span>}
+        {/* «По сайту вуза» — обычный случай (почти все статьи), в списке не показываем: метка только у исключений */}
+        {(a.data.status !== "sourced" || a.data.risk === 3 || a.data.people) && (
+          <span class="qlist__meta">
+            {a.data.status !== "sourced" && <span class={`pill ${a.data.status}`}>{a.data.status === "verified" && <span aria-hidden="true">✓ </span>}{statuses[a.data.status].label}</span>}
+            {a.data.risk === 3 && <span class="risk-mark">важно не ошибиться</span>}
+            {a.data.people && <span class="count num">спрашивали {a.data.people} чел.</span>}
+          </span>
+        )}
       </a>
     </li>
   ))}
