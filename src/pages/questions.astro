@@ -1,15 +1,14 @@
 ---
-import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import Search from "../components/Search.astro";
 import QuestionList from "../components/QuestionList.astro";
-import { stages, topics, topicOf } from "../site.config";
+import { stages, topics } from "../site.config";
+import { getArticles, topicOf } from "../lib/articles";
 
-// Все вопросы: поиск, фильтр по этапу (public/js/questions.js) и список по темам; порядок — по популярности, как на главной.
+// Все вопросы: поиск, фильтр по этапу (src/scripts/questions.js) и список по темам; порядок — по популярности, как на главной.
 // Без JS фильтр — обычные ссылки на страницы этапов, список показан целиком.
-const all = (await getCollection("articles"))
-  .sort((a, b) => (b.data.people ?? 0) - (a.data.people ?? 0) || b.data.risk - a.data.risk);
-const groups = topics.map((t) => ({ t, items: all.filter((a) => topicOf(a.id, a.data.stages) === t.slug) }))
+const all = await getArticles();
+const groups = topics.map((t) => ({ t, items: all.filter((a) => topicOf(a) === t.slug) }))
   .filter((g) => g.items.length > 0);
 ---
 <Base title="Все вопросы" root="./" description="Все ответы для студентов и абитуриентов Московского Политеха: поиск, этапы и темы.">
@@ -39,5 +38,5 @@ const groups = topics.map((t) => ({ t, items: all.filter((a) => topicOf(a.id, a.
     ))}
     <p class="empty" data-none hidden>На этом этапе вопросов пока нет.</p>
   </section>
-  <script is:inline src="/js/questions.js" defer></script>
+  <script src="../scripts/questions.js"></script>
 </Base>

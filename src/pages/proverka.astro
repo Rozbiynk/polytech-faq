@@ -1,19 +1,21 @@
 ---
 // Страница для активистов: инструкция и список статей с кнопками проверки. Не в sitemap, не индексируется.
-// Отметки уходят на сервер (/api/review) и показываются всем по /api/reviews — см. public/js/review.js.
-import { getCollection } from "astro:content";
+// Отметки уходят на сервер (/api/review) и показываются всем по /api/reviews — см. src/scripts/review.js.
 import Base from "../layouts/Base.astro";
+import "../styles/review.css";
 import { stageBySlug, statuses, riskLabels } from "../site.config";
+import { getArticles } from "../lib/articles";
 
-const all = (await getCollection("articles")).sort((a, b) =>
-  Number(a.data.status === "verified") - Number(b.data.status === "verified") || b.data.risk - a.data.risk || (b.data.people ?? 0) - (a.data.people ?? 0));
-const n = (s: string) => all.filter((a) => a.data.status === s).length;
+// непроверенные сверху, среди них — сначала с высокой ценой ошибки, потом по популярности
+const all = (await getArticles()).toSorted((a, b) =>
+  Number(a.data.status === "verified") - Number(b.data.status === "verified") || b.data.risk - a.data.risk);
+const verified = all.filter((a) => a.data.status === "verified").length;
 ---
 <Base title="Проверка статей" root="./" noindex description="Инструкция и список статей для проверки редакторами.">
   <article class="article review">
     <header class="article__head">
       <h1>Проверка статей</h1>
-      <p class="lead">Для тех, кто и так отвечает на вопросы в чатах Политеха. Проверено {n("verified")} из {all.length}, сверху — самое важное.</p>
+      <p class="lead">Для тех, кто и так отвечает на вопросы в чатах Политеха. Проверено {verified} из {all.length}, сверху — самое важное.</p>
     </header>
 
     <section class="block block--answer review__how">
@@ -54,7 +56,7 @@ const n = (s: string) => all.filter((a) => a.data.status === s).length;
           </div>
           <form class="review__form" hidden>
             <label class="label" for={`note-${a.id}`}>Что не так и как правильно (со ссылкой)</label>
-            <textarea id={`note-${a.id}`} name="note" required></textarea>
+            <textarea class="field" id={`note-${a.id}`} name="note" required></textarea>
             <button class="btn primary" type="submit">Отправить замечание</button>
           </form>
         </li>
@@ -65,7 +67,7 @@ const n = (s: string) => all.filter((a) => a.data.status === s).length;
       <h2>Предложить тему или черновик</h2>
       <form class="review__form">
         <label class="label" for="note-new">Вопрос, ответ, источник и как ещё об этом спрашивают в чатах</label>
-        <textarea id="note-new" name="note" required placeholder="Вопрос: Как получить материальную помощь?&#10;Ответ: …&#10;Источник: https://mospolytech.ru/…&#10;Как ещё спрашивают: матпомощь, материалка"></textarea>
+        <textarea class="field" id="note-new" name="note" required placeholder="Вопрос: Как получить материальную помощь?&#10;Ответ: …&#10;Источник: https://mospolytech.ru/…&#10;Как ещё спрашивают: матпомощь, материалка"></textarea>
         <button class="btn primary" type="submit">Отправить</button>
       </form>
       <ul class="review__marks" aria-live="polite"></ul>
@@ -76,5 +78,5 @@ const n = (s: string) => all.filter((a) => a.data.status === s).length;
       <input id="reviewer" class="qinput" type="text" autocomplete="nickname" maxlength="40">
     </div>
   </article>
-  <script is:inline src="/js/review.js" defer></script>
+  <script src="../scripts/review.js"></script>
 </Base>

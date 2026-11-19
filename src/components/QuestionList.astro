@@ -1,14 +1,14 @@
 ---
-import type { CollectionEntry } from "astro:content";
-import { statuses, topicOf } from "../site.config";
+import { statuses } from "../site.config";
+import { topicOf, type Article } from "../lib/articles";
 
 // limit: сколько строк видно сразу; остальные скрыты (их показывает фильтр по темам на главной)
-interface Props { items: CollectionEntry<"articles">[]; limit?: number }
+interface Props { items: Article[]; limit?: number }
 const { items, limit = Infinity } = Astro.props;
 ---
 <ul class="qlist">
   {items.map((a, i) => (
-    <li data-stages={a.data.stages.join(" ")} data-topic={topicOf(a.id, a.data.stages)} hidden={i >= limit}>
+    <li data-stages={a.data.stages.join(" ")} data-topic={topicOf(a)} hidden={i >= limit}>
       <a href={`/q/${a.id}`}>
         <span class="q">{a.data.title}</span>
         <span class="qlist__go" aria-hidden="true">→</span>
