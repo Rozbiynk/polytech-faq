@@ -4,11 +4,16 @@ import "@fontsource/montserrat/600.css";
 import "@fontsource/montserrat/700.css";
 import "../styles/theme.css";
 
-interface Props { title: string; noindex?: boolean }
-const { title, noindex = false } = Astro.props;
+// lightOnly — страница без тёмной темы (редактор); вместе с data-theme="light" на <html>
+interface Props { title: string; noindex?: boolean; lightOnly?: boolean }
+const { title, noindex = false, lightOnly = false } = Astro.props;
 ---
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<!-- какие темы есть у страницы: браузер до загрузки CSS красит фон и полосы прокрутки в нужную -->
+<meta name="color-scheme" content={lightOnly ? "light" : "light dark"} />
+<!-- цвет панели браузера на телефоне — как у шапки -->
+<meta name="theme-color" content="#1e1e1e" />
 <title>{title}</title>
 {noindex && <meta name="robots" content="noindex, nofollow" />}
 <slot />

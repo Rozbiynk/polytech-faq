@@ -8,9 +8,9 @@ import { site, stages, statuses, riskLabels } from "../site.config";
 const stageTitles = stages.map((s) => [s.slug, s.title]);
 const statusLabels = Object.fromEntries(Object.entries(statuses).map(([k, s]) => [k, s.label]));
 ---
-<html lang="ru">
+<html lang="ru" data-theme="light">
   <head>
-    <Head title={`Редактор — ${site.name}`} noindex />
+    <Head title={`Редактор — ${site.name}`} noindex lightOnly />
   </head>
   <body class="ed" data-stages={JSON.stringify(stageTitles)} data-risks={JSON.stringify(riskLabels)} data-statuses={JSON.stringify(statusLabels)}>
     <div id="app" class="ed-app"><p class="ed-empty">Загрузка…</p></div>

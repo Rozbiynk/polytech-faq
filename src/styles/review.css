@@ -11,7 +11,7 @@
 .review__meta { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
 .review__meta .chip { min-height: 28px; }
 .review__meta .chip:not(.c-apply):not(.c-first-year) { background: var(--color-paper-2); }
-.pill.risk3 { background: color-mix(in oklab, var(--color-accent) 14%, var(--color-paper)); color: color-mix(in oklab, var(--color-accent-deep) 82%, var(--color-ink)); }
+.pill.risk3 { background: color-mix(in oklab, var(--color-accent) 14%, var(--color-paper)); color: var(--color-accent-text); }
 .review__src { font-size: var(--text-sm); color: var(--color-ink-2); }
 .review__marks { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2xs); font-size: var(--text-sm); }
 .review__marks:empty { display: none; }

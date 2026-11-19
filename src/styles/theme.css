@@ -40,16 +40,40 @@
   --display-weight: 700; --tracking-display: -0.015em;
   /* фон во всю ширину без 100vw */
   --bleed: 0 // 0 100vmax;
+  /* тёмная полоса (шапка, первый экран, подвал, блок фактов): тёмная в обеих темах, текст на ней — --color-on-dark.
+     Не --color-ink: тот в тёмной теме становится светлым */
+  --color-band: #1e1e1e;
+  /* плитка этапа и чип этапа без своего цвета */
+  --color-tile: var(--color-paper);
+  /* синий бренда как текст (наведение, значки); --color-blue остаётся для заливок под белый текст */
+  --color-blue-ink: var(--color-blue);
   /* синий бренда на белом и сером даёт 4.3:1 — для текста ссылок чуть темнее */
   --color-link: color-mix(in oklab, var(--color-blue) 84%, var(--color-ink));
+  /* красный как текст на розовой плашке */
+  --color-accent-text: color-mix(in oklab, var(--color-accent-deep) 82%, var(--color-ink));
   /* красный бренда на тёмной полосе: светлее, чтобы читался */
   --color-accent-on-dark: color-mix(in oklab, var(--color-accent) 62%, var(--color-on-dark));
   /* рамка поля на тёмной полосе */
-  --color-rule-on-dark: color-mix(in oklab, var(--color-on-dark) 50%, var(--color-ink));
+  --color-rule-on-dark: color-mix(in oklab, var(--color-on-dark) 50%, var(--color-band));
+  color-scheme: light dark;
   /* воздух между секциями: справочник, а не лендинг — вдвое плотнее, чем в base.css (там 120/144) */
   --section-gap-s: 80px; --section-gap: 96px;
   /* отступ от шапки до содержимого */
   --page-top: var(--space-xl);
+}
+
+/* Тёмная тема — по настройке системы. Основа та же, что у бренда: чёрное и белое, красный и синий; меняются только
+   «бумага» и «чернила», полосы и заливки под белый текст остаются. Редактор (/edit) всегда светлый: data-theme="light". */
+:root[data-theme="light"] { color-scheme: light; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-paper: #121212; --color-well: #1b1b1b; --color-paper-2: #232323; --color-paper-3: #2c2c2c;
+    --color-ink: #f2f2f2; --color-ink-2: #d2d2d2; --color-muted: #a0a0a0; --color-rule: #363636;
+    --color-tile: var(--color-paper-3);
+    --color-blue-ink: #8fabea; --color-focus: #8fabea;
+    --color-link: color-mix(in oklab, var(--color-blue) 55%, var(--color-ink));
+    --color-accent-text: color-mix(in oklab, var(--color-accent) 55%, var(--color-ink));
+  }
 }
 
 body { line-height: 1.6; }
@@ -58,11 +82,11 @@ a { color: var(--color-link); }
 mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)); color: inherit; padding-inline: var(--space-3xs); border-radius: var(--space-3xs); }
 
 /* тёмная полоса во всю ширину: шапка, первый экран главной, подвал */
-.band { color: var(--color-on-dark); border-image: conic-gradient(var(--color-ink) 0 0) fill var(--bleed); }
+.band { color: var(--color-on-dark); border-image: conic-gradient(var(--color-band) 0 0) fill var(--bleed); }
 .band .lead a { color: var(--color-on-dark); }
 
 /* шапка */
-.top { min-height: var(--nav-h); display: grid; align-items: center; color: var(--color-on-dark); background: var(--color-ink); }
+.top { min-height: var(--nav-h); display: grid; align-items: center; color: var(--color-on-dark); background: var(--color-band); }
 .top__row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); }
 .top__brand { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2xs) var(--space-md); min-width: 0; }
 .logo { display: inline-flex; align-items: center; min-height: 24px; white-space: nowrap; font: 700 var(--text-md)/1.2 var(--font-display); color: var(--color-on-dark); text-decoration: none; }
@@ -96,8 +120,8 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 /* цвета этапов. Как на сайте вуза: чёрное и белое плюс два веб-акцента бренда — красный («Поступаю») и синий («Первый курс») */
 .c-apply { --c: var(--color-accent-deep); --c-ink: var(--color-on-dark); }
 .c-first-year { --c: var(--color-blue); --c-ink: var(--color-on-dark); }
-.c-study, .c-live, .c-change, .c-graduate { --c: var(--color-paper); --c-ink: var(--color-ink); }
-.banner:not(.c-apply):not(.c-first-year) { --c: var(--color-ink); --c-ink: var(--color-on-dark); }
+.c-study, .c-live, .c-change, .c-graduate { --c: var(--color-tile); --c-ink: var(--color-ink); }
+.banner:not(.c-apply):not(.c-first-year) { --c: var(--color-band); --c-ink: var(--color-on-dark); }
 .chip[class*="c-"] { background: var(--c); color: var(--c-ink); }
 .chip.c-apply, .chip.c-first-year { box-shadow: none; }
 .chip[class*="c-"]:hover { background: color-mix(in oklab, var(--c) 85%, var(--color-ink)); }
@@ -135,14 +159,14 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 /* примеры запросов под полем поиска */
 .hints { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-xs); margin-top: calc(-1 * var(--space-sm)); }
 .hints__label { font-size: var(--text-sm); color: var(--color-on-dark-2); }
-.hint { min-height: 36px; padding: 0 var(--space-md); border: 0; border-radius: var(--radius-pill); background: color-mix(in oklab, var(--color-on-dark) 14%, var(--color-ink)); color: var(--color-on-dark); font: 600 var(--text-sm)/1 var(--font-display); cursor: pointer; transition: background-color var(--dur-micro) var(--ease-out); }
+.hint { min-height: 36px; padding: 0 var(--space-md); border: 0; border-radius: var(--radius-pill); background: color-mix(in oklab, var(--color-on-dark) 14%, var(--color-band)); color: var(--color-on-dark); font: 600 var(--text-sm)/1 var(--font-display); cursor: pointer; transition: background-color var(--dur-micro) var(--ease-out); }
 .hint:hover { background: var(--color-blue); }
 .searchbox { min-width: 0; }
 /* «Часто ищут»: подпись сверху, ссылки списком по одной левой линии */
 .popular { display: grid; gap: var(--space-xs); }
 .popular__label { font-size: var(--text-sm); color: var(--color-on-dark-2); }
 .popular ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-xs); }
-.popular a { display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 40px; padding: var(--space-2xs) var(--space-md); border: 1px solid color-mix(in oklab, var(--color-on-dark) 35%, var(--color-ink)); border-radius: var(--radius-pill); color: var(--color-on-dark); font-size: var(--text-sm); line-height: 1.3; text-decoration: none; }
+.popular a { display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 40px; padding: var(--space-2xs) var(--space-md); border: 1px solid color-mix(in oklab, var(--color-on-dark) 35%, var(--color-band)); border-radius: var(--radius-pill); color: var(--color-on-dark); font-size: var(--text-sm); line-height: 1.3; text-decoration: none; }
 .popular a:hover { background: var(--color-blue); border-color: var(--color-blue); }
 
 /* главная: плитки этапов */
@@ -166,8 +190,9 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .top-list { gap: var(--space-md); }
 .tabs { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
 .tab { flex: none; min-height: 40px; padding: 0 var(--space-md); border: 1px solid var(--color-rule); border-radius: var(--radius-pill); background: var(--color-paper); color: var(--color-ink); font: 600 var(--text-sm)/1 var(--font-display); cursor: pointer; transition: background-color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out); }
-.tab:hover { border-color: var(--color-blue); color: var(--color-blue); }
-.tab[aria-pressed="true"] { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-on-dark); }
+.tab:hover { border-color: var(--color-blue-ink); color: var(--color-blue-ink); }
+/* выбранная вкладка — «наоборот»: чернила фоном, бумага текстом (в тёмной теме светлая на тёмном) */
+.tab[aria-pressed="true"] { background: var(--color-ink); border-color: var(--color-ink); color: var(--color-paper); }
 /* темы: строки с числом вопросов справа */
 .topics { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xs); }
 .topics a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--space-2xs) var(--space-md); height: 100%; padding: var(--space-md); background: var(--color-well); color: var(--color-ink); text-decoration: none; transition: background-color var(--dur-micro) var(--ease-out); }
@@ -185,7 +210,7 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .qlist a:hover { background-color: var(--color-well); }
 .qlist a:focus-visible { outline-offset: -2px; }
 .qlist .q { font: 700 var(--text-lg)/1.3 var(--font-display); }
-.qlist a:hover .q { color: var(--color-blue); }
+.qlist a:hover .q { color: var(--color-blue-ink); }
 .qlist__meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2xs) var(--space-sm); min-width: 0; }
 /* счётчик — в правом верхнем углу строки, на уровне первой строки вопроса (место под него — правый отступ ссылки) */
 .qlist .count { position: absolute; top: calc(var(--space-lg) + 0.3em); right: var(--space-sm); font-size: var(--text-xs); color: var(--color-muted); white-space: nowrap; }
@@ -196,7 +221,7 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 }
 
 /* страница этапа: цветной блок этапа */
-.banner { display: grid; gap: var(--space-xs); padding: var(--space-lg) var(--space-2xl) var(--space-xl); border-radius: var(--radius-panel); background: var(--c, var(--color-ink)); color: var(--c-ink, var(--color-on-dark)); }
+.banner { display: grid; gap: var(--space-xs); padding: var(--space-lg) var(--space-2xl) var(--space-xl); border-radius: var(--radius-panel); background: var(--c, var(--color-band)); color: var(--c-ink, var(--color-on-dark)); }
 .banner h1 { font-size: clamp(2.25rem, 3vw + 1rem, 4rem); }
 .banner .lead { color: inherit; }
 .banner a { color: inherit; }
@@ -209,7 +234,7 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .allq { display: grid; gap: var(--space-lg); max-width: 64rem; }
 .filter { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
 .filter__chip { border-radius: var(--radius-pill); }
-.filter__chip[aria-current="true"] { background: var(--color-ink); color: var(--color-on-dark); box-shadow: none; }
+.filter__chip[aria-current="true"] { background: var(--color-ink); color: var(--color-paper); box-shadow: none; }
 .filter__count { font-size: var(--text-sm); color: var(--color-muted); }
 .topics-nav { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-md); font-size: var(--text-sm); }
 .topics-nav a { display: inline-flex; align-items: center; min-height: 32px; }
@@ -231,7 +256,7 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .block > h2 { font-size: var(--text-xl); line-height: 1.2; }
 .block--answer { gap: var(--space-md); min-width: 0; padding: var(--space-xl); border-radius: var(--radius-panel); background: var(--color-well); border-top: 2px solid var(--color-ink); }
 /* синий бренда на сером фоне — 4.4:1, чуть темнее для контраста */
-.block--answer a { color: color-mix(in oklab, var(--color-blue) 82%, var(--color-ink)); }
+.block--answer a { color: color-mix(in oklab, var(--color-link) 97%, var(--color-ink)); }
 .answer { font-size: 1.0625rem; line-height: 1.65; max-width: 65ch; overflow-wrap: break-word; min-width: 0; }
 .answer > :first-child { margin-top: 0; } .answer > :last-child { margin-bottom: 0; }
 .answer p { margin-block: 0 var(--space-sm); }
@@ -244,8 +269,8 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .answer td:last-child { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .sources { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-xs); }
 .sources a { display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 44px; padding: var(--space-xs) var(--space-md); border: 1px solid var(--color-rule); border-radius: var(--radius); background: var(--color-paper); color: var(--color-ink); font: 600 var(--text-sm)/1.3 var(--font-display); text-decoration: none; }
-.sources a::after { content: "↗"; color: var(--color-blue); }
-.sources a:hover { border-color: var(--color-blue); color: var(--color-blue); }
+.sources a::after { content: "↗"; color: var(--color-blue-ink); }
+.sources a:hover { border-color: var(--color-blue-ink); color: var(--color-blue-ink); }
 /* один совет — во всю ширину, несколько — колонками */
 .tips { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: var(--space-sm); }
 .tips li { padding: var(--space-md); border-radius: var(--radius-panel); background: var(--color-well); color: var(--color-ink-2); font-size: var(--text-md); line-height: 1.5; }
@@ -264,7 +289,7 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
   .article--answer > .article__body { grid-area: 2 / 1 / span 2; }
   .article--answer > .related { grid-area: 3 / 2 / span 2; }
   .article--answer > .feedback { grid-area: 4 / 1; }
-  .facts { display: grid; gap: var(--space-md); padding: var(--space-lg); border-radius: var(--radius-panel); background: var(--color-ink); color: var(--color-on-dark); font-size: var(--text-md); }
+  .facts { display: grid; gap: var(--space-md); padding: var(--space-lg); border-radius: var(--radius-panel); background: var(--color-band); color: var(--color-on-dark); font-size: var(--text-md); }
   .facts > div { display: grid; gap: var(--space-3xs); }
   .facts dt { font-size: var(--text-sm); color: var(--color-on-dark-2); }
   .facts dt::after { content: none; }
@@ -289,7 +314,7 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .about__rows p { font-size: var(--text-md); line-height: 1.65; }
 
 /* подвал */
-.foot { padding-block: var(--space-3xl) var(--space-2xl); color: var(--color-on-dark); background: var(--color-ink); }
+.foot { padding-block: var(--space-3xl) var(--space-2xl); color: var(--color-on-dark); background: var(--color-band); }
 .foot__row { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--gap-columns); align-items: end; }
 .foot__mark { font: 700 var(--text-section)/1.04 var(--font-display); letter-spacing: var(--tracking-display); }
 .foot__note { font-size: var(--text-sm); color: var(--color-on-dark-2); max-width: 44ch; }
@@ -297,7 +322,7 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 /* поиск Pagefind: стандартный интерфейс под токены. Его переменные объявлены на самом .pagefind-ui, поэтому
    переопределяем их там же; .band — тот же поиск на тёмной полосе главной */
 .search .pagefind-ui {
-  --pagefind-ui-primary: var(--color-blue); --pagefind-ui-text: var(--color-ink); --pagefind-ui-background: var(--color-paper);
+  --pagefind-ui-primary: var(--color-blue-ink); --pagefind-ui-text: var(--color-ink); --pagefind-ui-background: var(--color-paper);
   --pagefind-ui-border: var(--color-muted); --pagefind-ui-tag: var(--color-paper-2); --pagefind-ui-border-width: 1px;
   --pagefind-ui-border-radius: 4px; --pagefind-ui-font: var(--font-body); --pagefind-ui-scale: 0.95;
 }
@@ -305,7 +330,7 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .search .pagefind-ui .pagefind-ui__search-input { height: 60px; padding: 0 var(--space-md) 0 52px; border-radius: 0; font: 400 var(--text-md)/1 var(--font-body); text-overflow: ellipsis; color: var(--color-ink); }
 .search .pagefind-ui .pagefind-ui__search-input:not(:placeholder-shown) { padding-right: 60px; }
 .search .pagefind-ui .pagefind-ui__search-input::placeholder { opacity: 1; color: var(--color-muted); }
-.search .pagefind-ui__search-input:focus-visible, .qinput:focus-visible { outline: 2px solid var(--color-blue); outline-offset: 0; border-color: var(--color-blue); }
+.search .pagefind-ui__search-input:focus-visible, .qinput:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 0; border-color: var(--color-focus); }
 .band .search .pagefind-ui .pagefind-ui__search-input { color: var(--color-on-dark); }
 /* на тёмной полосе синяя обводка сливается с фоном — белая, вместе с рамкой 2 px */
 .band .search .pagefind-ui__search-input:focus-visible, .band .qinput:focus-visible { outline: 1px solid var(--color-on-dark); border-color: var(--color-on-dark); }
