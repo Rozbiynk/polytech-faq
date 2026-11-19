@@ -69,6 +69,21 @@ export const topicFor = (id: string, stages: readonly string[]): TopicSlug =>
   topicMap[id] ?? (id.startsWith("dorm-") ? "dorm" : topicByStage[stages[0]] ?? "study");
 
 // checked — подпись к дате сверки в статье
+// Главная статья по слову. На общий запрос из одного слова («общежитие», «стипендия») поиск даёт почти равный счёт
+// всем статьям темы, и первой выходила случайная. Слова отсюда попадают в мета-поле keys статьи (q/[slug].astro),
+// а поиск даёт совпадению в нём повышенный вес (metaWeights в src/scripts/search.js) — и статья встаёт первой.
+// Писать в начальной форме; разговорные слова («общага», «стипуха») сюда не нужны — их переводит
+// src/scripts/lib/search-tuning.js. Проверка: pnpm build && pnpm check:search.
+export const searchMain: Record<string, string[]> = {
+  "dorm-how-to-get": ["общежитие"],
+  "dorm-conditions": ["общежитие", "цена"],
+  "scholarship": ["стипендия"],
+  "paid-admission": ["платное"],
+  "budget-places": ["бюджет"],
+  "sports-club": ["секция"],
+  "contacts": ["обращаться"],
+};
+
 export const statuses = {
   draft: { label: "Черновик", checked: "Обновлено", note: "Собрано из ответов в чатах и не проверено. Сверяйте с официальными источниками." },
   sourced: { label: "По сайту вуза", checked: "Сверено с сайтом вуза", note: "Ответ составлен по официальным страницам университета — ссылки ниже. Правила и сроки меняются каждый год: перед важным шагом откройте источник." },

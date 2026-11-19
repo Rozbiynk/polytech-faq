@@ -3,7 +3,7 @@ import { render } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import Feedback from "../../components/Feedback.astro";
 import QuestionList from "../../components/QuestionList.astro";
-import { stageBySlug, statuses, riskLabels, redirects, topicBySlug } from "../../site.config";
+import { stageBySlug, statuses, riskLabels, redirects, topicBySlug, searchMain } from "../../site.config";
 import { getArticles, relatedTo, topicOf, isoDate, longDate, type Article } from "../../lib/articles";
 import { movedPage } from "../../lib/moved";
 
@@ -80,5 +80,7 @@ const checked = d.checked && { iso: isoDate(d.checked), text: longDate(d.checked
 
     <!-- формулировки из чатов: не показываются, но по ним находит поиск («общага», «ЛК», опечатки) -->
     <div hidden>{d.aliases.join(" · ")}</div>
+    {/* слова, по которым эта статья главная (searchMain в site.config.ts) */}
+    {searchMain[a.id] && <div hidden data-pagefind-meta="keys">{searchMain[a.id].join(" ")}</div>}
   </article>
 </Base>
