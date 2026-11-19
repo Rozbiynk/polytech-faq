@@ -1,46 +1,40 @@
 ---
-import { getCollection, render } from "astro:content";
+import { render } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import Feedback from "../../components/Feedback.astro";
 import QuestionList from "../../components/QuestionList.astro";
-import { stageBySlug, statuses, riskLabels, redirects, topicBySlug, topicOf } from "../../site.config";
+import { stageBySlug, statuses, riskLabels, redirects, topicBySlug } from "../../site.config";
+import { getArticles, relatedTo, topicOf, isoDate, longDate, type Article } from "../../lib/articles";
+import { movedPage } from "../../lib/moved";
+
+type Props = { a: Article; related: Article[] } | { to: string };
 
 export async function getStaticPaths() {
-  const pages = (await getCollection("articles")).map((a) => ({ params: { slug: a.id }, props: { a, to: undefined } }));
+  const all = await getArticles();
+  const pages = all.map((a) => ({ params: { slug: a.id }, props: { a, related: relatedTo(a, all) } }));
   // старые адреса из чатов ведут на новые статьи
-  const moved = Object.entries(redirects).map(([from, to]) => ({ params: { slug: from }, props: { a: undefined, to } }));
+  const moved = Object.entries(redirects).map(([from, to]) => ({ params: { slug: from }, props: { to } }));
   return [...pages, ...moved];
 }
-const { a, to } = Astro.props;
-if (to) return new Response(
-  `<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="robots" content="noindex">` +
-  `<meta http-equiv="refresh" content="0; url=${to}"><link rel="canonical" href="${new URL(`/q/${to}`, Astro.site)}">` +
-  `<title>Статья переехала</title></head><body><p>Статья переехала: <a href="${to}">открыть</a>.</p></body></html>`,
-  { headers: { "Content-Type": "text/html; charset=utf-8" } });
-const { Content } = await render(a!);
-const d = a!.data;
-const fmt = (x: Date) => x.toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
-const topic = topicOf(a!.id, d.stages);
+const props = Astro.props as Props;
+if ("to" in props) return movedPage(props.to, Astro.site);
 
-// Похожие: та же тема важнее общих этапов, при равенстве — о чём чаще спрашивали
-const shared = (b: typeof a) => b!.data.stages.filter((s) => d.stages.includes(s)).length;
-const related = (await getCollection("articles"))
-  .filter((b) => b.id !== a!.id)
-  .map((b) => ({ b, score: (topicOf(b.id, b.data.stages) === topic ? 2 : 0) + shared(b) }))
-  .filter((x) => x.score > 0)
-  .sort((x, y) => y.score - x.score || (y.b.data.people ?? 0) - (x.b.data.people ?? 0))
-  .slice(0, 4).map((x) => x.b);
+const { a, related } = props;
+const { Content } = await render(a);
+const d = a.data;
+const topic = topicBySlug[topicOf(a)];
+const checked = d.checked && { iso: isoDate(d.checked), text: longDate(d.checked) };
 ---
 <Base title={d.title} root="../" description={`${d.title} Ответ для студентов и абитуриентов Московского Политеха.`}>
   <article class="article" data-pagefind-body>
     <header class="article__head">
-      <a class="crumb" href={`/questions#${topic}`} data-pagefind-ignore>← {topicBySlug[topic].title}</a>
+      <a class="crumb" href={`/questions#${topic.slug}`} data-pagefind-ignore>← {topic.title}</a>
       <div class="tags">
         {d.stages.map((s) => <a class={`chip c-${s}`} href={`/stage/${s}`} data-pagefind-ignore>{stageBySlug[s].title}</a>)}
         <span class={`pill ${d.status}`} data-pagefind-ignore>{statuses[d.status].label}</span>
         {d.actual && <span class="pill actual" data-pagefind-ignore>{d.actual}</span>}
       </div>
-      {d.checked && <p class="checked" data-pagefind-ignore>{{ verified: "Проверено", sourced: "Сверено с сайтом вуза", draft: "Обновлено" }[d.status]} <time datetime={d.checked.toISOString().slice(0, 10)}>{fmt(d.checked)}</time></p>}
+      {checked && <p class="checked" data-pagefind-ignore>{statuses[d.status].checked} <time datetime={checked.iso}>{checked.text}</time></p>}
       <h1>{d.title}</h1>
       <p class={`notice ${d.status}`} data-pagefind-ignore>{statuses[d.status].note}</p>
     </header>
@@ -67,16 +61,17 @@ const related = (await getCollection("articles"))
       )}
     </div>
 
-    <dl class={`facts${d.risk === 3 ? " facts--risk" : ""}`} data-pagefind-ignore>
-      <div><dt>{d.status === "sourced" ? "Сверено с сайтом вуза" : "Проверено"}</dt><dd>{d.checked ? fmt(d.checked) : "ещё нет"}</dd></div>
-      <div class="facts__risk"><dt>Цена ошибки</dt><dd>{riskLabels[d.risk as 1 | 2 | 3]}</dd></div>
+    <dl class:list={["facts", d.risk === 3 && "facts--risk"]} data-pagefind-ignore>
+      {/* у черновика здесь «Проверено: ещё нет / дата», а не «Обновлено», как в строке над заголовком */}
+      <div><dt>{statuses[d.status === "sourced" ? "sourced" : "verified"].checked}</dt><dd>{checked ? checked.text : "ещё нет"}</dd></div>
+      <div class="facts__risk"><dt>Цена ошибки</dt><dd>{riskLabels[d.risk as keyof typeof riskLabels]}</dd></div>
       {d.people && <div><dt>Спрашивали</dt><dd class="num">{d.people} человек в чатах</dd></div>}
     </dl>
 
     <!-- формулировки из чатов: не показываются, но по ним находит поиск («общага», «ЛК», опечатки) -->
     <div hidden>{d.aliases.join(" · ")}</div>
   </article>
-  <Feedback slug={a!.id} />
+  <Feedback slug={a.id} />
   {related.length > 0 && (
     <section class="related" aria-labelledby="related-h">
       <h2 id="related-h">Похожие вопросы</h2>

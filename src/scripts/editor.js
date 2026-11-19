@@ -5,7 +5,7 @@
   const STAGES = JSON.parse(document.body.dataset.stages);
   const STAGE = Object.fromEntries(STAGES);
   const RISKS = JSON.parse(document.body.dataset.risks);
-  const STATUS = { draft: "Черновик", sourced: "По сайту вуза", verified: "Проверено" };
+  const STATUS = JSON.parse(document.body.dataset.statuses);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
   const date = (t) => (t ? `${t.slice(8, 10)}.${t.slice(5, 7)}` : "");
   const when = (t) => (t ? `${date(t)} ${t.slice(11, 16)}` : "");

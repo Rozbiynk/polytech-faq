@@ -1,15 +1,14 @@
 ---
-import { getCollection } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import QuestionList from "../../components/QuestionList.astro";
 import { stages } from "../../site.config";
+import { getArticles } from "../../lib/articles";
 
 export function getStaticPaths() {
   return stages.map((s) => ({ params: { stage: s.slug }, props: { stage: s } }));
 }
 const { stage } = Astro.props;
-const items = (await getCollection("articles", (a) => a.data.stages.includes(stage.slug)))
-  .sort((a, b) => (b.data.people ?? 0) - (a.data.people ?? 0) || b.data.risk - a.data.risk);
+const items = (await getArticles()).filter((a) => a.data.stages.includes(stage.slug));
 ---
 <Base title={stage.title} root="../">
   <section class={`banner c-${stage.slug}`}>

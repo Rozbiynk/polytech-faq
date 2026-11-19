@@ -10,9 +10,17 @@
 | Статьи (1 вопрос = 1 файл) | `src/content/articles/*.md` | нет |
 | Схема статьи (поля frontmatter) | `src/content.config.ts` | нет |
 | Название, этапы, темы, статусы | `src/site.config.ts` | нет |
+| Порядок вопросов, тема статьи, похожие | `src/lib/articles.ts` | нет |
 | **Внешний вид** (цвета, шрифты, отступы) | `src/styles/theme.css` | да — главный файл |
 | Разметка блоков | `src/components/*.astro`, `src/layouts/Base.astro` | по желанию |
 | Страницы (главная, этап, статья, о проекте) | `src/pages/` | по желанию |
+| Скрипты страниц (поиск, фильтры, отзывы, редактор) | `src/scripts/` | нет |
+
+Стили: `tokens.css` и `base.css` — переменные и основа (подключаются из `theme.css`), `theme.css` — весь сайт по
+разделам, `review.css` — только `/proverka`, `editor.css` — только `/edit`.
+
+Порядок вопросов везде один (`byPopularity`): чаще спрашивали — выше, при равенстве — где цена ошибки выше, дальше по
+имени файла. Страницы берут статьи через `getArticles()`, а не `getCollection` напрямую.
 
 Новый дизайн = новый `theme.css` (и при необходимости новые компоненты). Статьи, адреса и поиск остаются.
 
@@ -37,7 +45,8 @@ tips: [...]                 # «что говорят студенты» — о�
 
 ## Поиск
 Pagefind индексирует собранный сайт (`pnpm build` = `astro build && pagefind --site dist`), ищет по тексту и `aliases`.
-Если файлов Pagefind нет (превью в Claude Artifact их не раздаёт), включается простой поиск по `search.json`.
+Если файлов Pagefind нет (превью в Claude Artifact их не раздаёт), включается простой поиск по `search.json`
+(`src/scripts/search-fallback.js`, подгружается только в этом случае).
 
 ## Обратная связь
 Кнопки «Помогла ли статья?» и «Сообщить об ошибке» шлют POST JSON на `data-feedback-url` в
@@ -46,7 +55,7 @@ Pagefind индексирует собранный сайт (`pnpm build` = `ast
 ## Правка статей и выкладка (с 2026-10-29)
 Код — открытый репозиторий https://github.com/Rozbiynk/polytech-faq (корень — эта папка `site/`).
 - **Редактор: https://faq.rozb.pw/edit** — свой, в стиле сайта: `src/pages/edit.astro`, `src/styles/editor.css`,
-  `public/js/editor.js`. Вход по ссылке-приглашению (без GitHub-аккаунта); редактор отправляет правку на проверку,
+  `src/scripts/editor.js`. Вход по ссылке-приглашению (без GitHub-аккаунта); редактор отправляет правку на проверку,
   админ публикует. Сервер — `../editor/` (Rust, сервис `rozb-faq-editor` на rozb-server, `/api/ed/*`): черновики,
   приглашения, коммит в `main` от имени автора правки по deploy key. Поле `todo` («что раскрыть») видно только там.
 - Запасной редактор для владельцев GitHub-аккаунтов — Decap CMS на `/decap` (`public/decap/`, вход через GitHub OAuth,
@@ -69,7 +78,9 @@ pnpm preview    # посмотреть сборку
 локально — положить те же файлы в `public/fonts/gilroy/`. Без них заголовки в Montserrat.
 
 CSP сервера строгий: без inline-скриптов и стилей, шрифты только свои (`@fontsource`), wasm для Pagefind разрешён.
-Поэтому скрипты — в `public/js/`, CSS — файлами, `assetsInlineLimit: 0`.
+Поэтому скрипты (`src/scripts/`, модули с общими функциями в `lib/`) и CSS собираются файлами в `/_astro/` с хэшем
+в имени — `assetsInlineLimit: 0` не даёт Astro встроить мелкие в страницу. В `.astro` скрипт подключается как
+`<script src="../scripts/имя.js"></script>` (без `is:inline`).
 Превью в Claude Artifact: скопировать `dist/` без `pagefind/` в `~/Общее/polytech-faq/preview/` и опубликовать.
 
 ## Запуск для всех (2026-10-27)

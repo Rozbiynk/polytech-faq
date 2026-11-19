@@ -9,7 +9,7 @@
 /* навигация */
 .ed-nav { position: sticky; top: 0; height: 100svh; display: flex; flex-direction: column; gap: var(--space-lg); padding: var(--space-lg) var(--space-md); background: var(--color-ink); color: var(--color-on-dark); overflow-y: auto; }
 .ed-logo { font: 700 var(--text-md)/1.2 var(--font-display); color: var(--color-on-dark); text-decoration: none; }
-.ed-logo b { color: color-mix(in oklab, var(--color-accent) 62%, var(--color-on-dark)); }
+.ed-logo b { color: var(--color-accent-on-dark); }
 .ed-logo small { display: block; margin-top: var(--space-2xs); font: 400 var(--text-sm)/1.3 var(--font-body); color: var(--color-on-dark-2); }
 .ed-menu { display: grid; gap: var(--space-3xs); margin: 0; padding: 0; list-style: none; }
 .ed-menu a, .ed-work a { display: flex; align-items: center; justify-content: space-between; gap: var(--space-sm); min-height: 44px; padding: var(--space-xs) var(--space-sm); color: var(--color-on-dark); text-decoration: none; border-left: 3px solid transparent; }
@@ -96,7 +96,7 @@
 .ed-rows > div > input { flex: 1 1 12rem; }
 .ed-x { min-width: 40px; min-height: 40px; border: 0; background: none; color: var(--color-muted); cursor: pointer; font-size: 1.25rem; line-height: 1; }
 .ed-x:hover { color: var(--color-error); }
-.ed-add { justify-self: start; min-height: 40px; border: 0; background: none; padding: 0; color: color-mix(in oklab, var(--color-blue) 84%, var(--color-ink)); font: 700 var(--text-sm)/1 var(--font-display); cursor: pointer; }
+.ed-add { justify-self: start; min-height: 40px; border: 0; background: none; padding: 0; color: var(--color-link); font: 700 var(--text-sm)/1 var(--font-display); cursor: pointer; }
 .ed-add:hover { text-decoration: underline; }
 .ed-chips { display: flex; flex-wrap: wrap; gap: var(--space-2xs); }
 .ed-chips span { display: inline-flex; align-items: center; gap: var(--space-3xs); padding-left: var(--space-xs); background: var(--color-paper-2); font-size: var(--text-sm); max-width: 100%; overflow-wrap: anywhere; }

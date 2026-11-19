@@ -1,0 +1,18 @@
+---
+// Общая часть <head> для сайта (Base.astro) и редактора (edit.astro): шрифты, тема, название, иконка.
+import "@fontsource/montserrat/600.css";
+import "@fontsource/montserrat/700.css";
+import "../styles/theme.css";
+
+interface Props { title: string; noindex?: boolean }
+const { title, noindex = false } = Astro.props;
+---
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>{title}</title>
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+<slot />
+<!-- иконка: «П» и красная точка, как в «Политех.Ответы»; .ico — для старых браузеров, png — для экрана «Домой» на iPhone -->
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />

@@ -1,7 +1,5 @@
 ---
-import "@fontsource/montserrat/600.css";
-import "@fontsource/montserrat/700.css";
-import "../styles/theme.css";
+import Head from "../components/Head.astro";
 import { site } from "../site.config";
 
 interface Props { title?: string; description?: string; root: string; noindex?: boolean }
@@ -13,27 +11,21 @@ const ogImage = new URL("/og.png", site.url).href;
 ---
 <html lang="ru">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>{fullTitle}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, nofollow" />}
-    <!-- превью ссылки в Telegram, VK и мессенджерах -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content={site.name} />
-    <meta property="og:locale" content="ru_RU" />
-    <meta property="og:title" content={title ?? site.name} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:image" content={ogImage} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <!-- иконка: «П» и красная точка, как в «Политех.Ответы»; .ico — для старых браузеров, png — для экрана «Домой» на iPhone -->
-    <link rel="icon" href="/favicon.ico" sizes="48x48" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <Head title={fullTitle} noindex={noindex}>
+      <meta name="description" content={description} />
+      <link rel="canonical" href={canonical} />
+      <!-- превью ссылки в Telegram, VK и мессенджерах -->
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content={site.name} />
+      <meta property="og:locale" content="ru_RU" />
+      <meta property="og:title" content={title ?? site.name} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={canonical} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta name="twitter:card" content="summary_large_image" />
+    </Head>
     <!-- Gilroy — заголовки (700) и чипы с кнопками (600) первого экрана: качаем сразу, а не после CSS, чтобы они раньше
          перешли с системного шрифта на Gilroy и не сдвигали страницу (CLS; чипы этапов в статье от смены шрифта
          перескакивали из двух строк в одну). Файлы есть только на сервере, локально и в превью preload даст 404 — не мешает. -->

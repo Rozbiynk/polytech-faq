@@ -19,7 +19,7 @@ export const stages = [
   { slug: "change", title: "Меняю планы", desc: "Академ, перевод, отчисление" },
   { slug: "graduate", title: "Выпускаюсь", desc: "Практика, диплом, справки" },
 ] as const;
-
+export type StageSlug = (typeof stages)[number]["slug"];
 export const stageBySlug = Object.fromEntries(stages.map((s) => [s.slug, s]));
 
 // Темы — вторая ось навигации («Все вопросы», главная, «← тема» в статье). У статьи одна тема.
@@ -36,7 +36,7 @@ export const topics = [
 export type TopicSlug = (typeof topics)[number]["slug"];
 export const topicBySlug = Object.fromEntries(topics.map((t) => [t.slug, t]));
 
-// Тема статьи — по имени файла. Новые статьи, которых здесь нет, получают тему по первому этапу (topicOf).
+// Тема статьи — по имени файла. Новые статьи, которых здесь нет, получают тему по первому этапу (topicFor).
 const topicMap: Record<string, TopicSlug> = {
   "academic-leave": "change", "change-program": "change", "expulsion": "change", "transfer-from-another-university": "change",
   "before-graduation": "change", "diploma-duplicate": "change", "school-certificate-back": "change",
@@ -63,14 +63,17 @@ const topicMap: Record<string, TopicSlug> = {
 const topicByStage: Record<string, TopicSlug> = {
   apply: "admission", "first-year": "study", study: "study", live: "dorm", change: "change", graduate: "change",
 };
-export const topicOf = (id: string, stages: readonly string[]): TopicSlug =>
+// для страниц есть topicOf(статья) в src/lib/articles.ts
+export const topicFor = (id: string, stages: readonly string[]): TopicSlug =>
   topicMap[id] ?? (id.startsWith("dorm-") ? "dorm" : topicByStage[stages[0]] ?? "study");
 
+// checked — подпись к дате сверки в статье
 export const statuses = {
-  draft: { label: "Черновик", note: "Собрано из ответов в чатах и не проверено. Сверяйте с официальными источниками." },
-  sourced: { label: "По сайту вуза", note: "Ответ составлен по официальным страницам университета — ссылки ниже. Правила и сроки меняются каждый год: перед важным шагом откройте источник." },
-  verified: { label: "Проверено", note: "Проверено редактором по официальным источникам." },
+  draft: { label: "Черновик", checked: "Обновлено", note: "Собрано из ответов в чатах и не проверено. Сверяйте с официальными источниками." },
+  sourced: { label: "По сайту вуза", checked: "Сверено с сайтом вуза", note: "Ответ составлен по официальным страницам университета — ссылки ниже. Правила и сроки меняются каждый год: перед важным шагом откройте источник." },
+  verified: { label: "Проверено", checked: "Проверено", note: "Проверено редактором по официальным источникам." },
 } as const;
+export type Status = keyof typeof statuses;
 
 export const riskLabels = { 1: "мелочь", 2: "неудобно", 3: "можно потерять место или срок" } as const;
 

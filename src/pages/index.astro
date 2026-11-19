@@ -1,13 +1,15 @@
 ---
-import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
 import Search from "../components/Search.astro";
 import QuestionList from "../components/QuestionList.astro";
-import { site, stages, topics, topicOf } from "../site.config";
+import { site, stages, topics } from "../site.config";
+import { getArticles, topicOf } from "../lib/articles";
 
-const all = await getCollection("articles");
-const byPeople = all.toSorted((a, b) => (b.data.people ?? 0) - (a.data.people ?? 0));
-const popular = site.popular.map((id) => all.find((a) => a.id === id)).filter(Boolean);
+const all = await getArticles();
+const popular = site.popular.flatMap((id) => all.find((a) => a.id === id) ?? []);
+// этапы и темы без статей не показываем (страница пустого этапа остаётся)
+const liveStages = stages.filter((s) => all.some((a) => a.data.stages.includes(s.slug)));
+const liveTopics = topics.map((t) => ({ ...t, n: all.filter((a) => topicOf(a) === t.slug).length })).filter((t) => t.n > 0);
 ---
 <Base root="./">
   <section class="hero band">
@@ -23,24 +25,20 @@ const popular = site.popular.map((id) => all.find((a) => a.id === id)).filter(Bo
       </div>
       <div class="popular">
         <span class="popular__label">Часто ищут</span>
-        <ul>{popular.map((a) => <li><a href={`/q/${a!.id}`}>{a!.data.title} <span aria-hidden="true">→</span></a></li>)}</ul>
+        <ul>{popular.map((a) => <li><a href={`/q/${a.id}`}>{a.data.title} <span aria-hidden="true">→</span></a></li>)}</ul>
       </div>
     </div>
 
     <section class="stages-wrap" aria-labelledby="stages-h">
       <h2 id="stages-h">На каком вы этапе?</h2>
       <div class="stages">
-        {stages.map((s) => ({ s, n: all.filter((a) => a.data.stages.includes(s.slug)).length }))
-          .filter(({ n }) => n > 0) /* пустой этап не показываем, его страница остаётся */
-          .map(({ s }) => {
-          return (
-            <a class={`stage c-${s.slug}`} href={`/stage/${s.slug}`}>
-              <strong>{s.title}</strong>
-              <span>{s.desc}</span>
-              <span class="stage__go" aria-hidden="true">→</span>
-            </a>
-          );
-        })}
+        {liveStages.map((s) => (
+          <a class={`stage c-${s.slug}`} href={`/stage/${s.slug}`}>
+            <strong>{s.title}</strong>
+            <span>{s.desc}</span>
+            <span class="stage__go" aria-hidden="true">→</span>
+          </a>
+        ))}
       </div>
     </section>
   </section>
@@ -48,13 +46,12 @@ const popular = site.popular.map((id) => all.find((a) => a.id === id)).filter(Bo
   <section class="section split" aria-labelledby="top-h">
     <h2 id="top-h">Чаще всего спрашивают</h2>
     <div class="split__body top-list">
-      <!-- темы: показывают 10 самых частых вопросов темы (public/js/top-topics.js); без JS — общий топ-10 -->
+      <!-- темы: показывают 10 самых частых вопросов темы (src/scripts/top-topics.js); без JS — общий топ-10 -->
       <div class="tabs" role="group" aria-label="Тема">
         <button type="button" class="tab" data-topic="" aria-pressed="true">Все темы</button>
-        {topics.filter((t) => all.some((a) => topicOf(a.id, a.data.stages) === t.slug))
-          .map((t) => <button type="button" class="tab" data-topic={t.slug} aria-pressed="false">{t.title}</button>)}
+        {liveTopics.map((t) => <button type="button" class="tab" data-topic={t.slug} aria-pressed="false">{t.title}</button>)}
       </div>
-      <QuestionList items={byPeople} limit={10} />
+      <QuestionList items={all} limit={10} />
       <a class="btn more" href="/questions">Все вопросы ({all.length}) →</a>
     </div>
   </section>
@@ -62,16 +59,14 @@ const popular = site.popular.map((id) => all.find((a) => a.id === id)).filter(Bo
   <section class="section split" aria-labelledby="topics-h">
     <h2 id="topics-h">Вопросы по темам</h2>
     <ul class="topics">
-      {topics.map((t) => ({ t, n: all.filter((a) => topicOf(a.id, a.data.stages) === t.slug).length }))
-        .filter(({ n }) => n > 0)
-        .map(({ t, n }) => (
-          <li><a href={`/questions#${t.slug}`}>
-            <strong>{t.title}</strong>
-            <span>{t.desc}</span>
-            <span class="topics__n num">{n}</span>
-          </a></li>
-        ))}
+      {liveTopics.map((t) => (
+        <li><a href={`/questions#${t.slug}`}>
+          <strong>{t.title}</strong>
+          <span>{t.desc}</span>
+          <span class="topics__n num">{t.n}</span>
+        </a></li>
+      ))}
     </ul>
   </section>
-  <script is:inline src="/js/top-topics.js" defer></script>
+  <script src="../scripts/top-topics.js"></script>
 </Base>

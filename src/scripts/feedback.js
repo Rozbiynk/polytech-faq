@@ -1,3 +1,6 @@
+// «Помогла ли статья?» и «Сообщить об ошибке» под статьёй (components/Feedback.astro)
+import { postJSON } from "./lib/post.js";
+
 document.querySelectorAll(".feedback").forEach((box) => {
   const form = box.querySelector("form"), thanks = box.querySelector(".thanks");
   const say = (msg) => { thanks.textContent = msg; thanks.hidden = false; };
@@ -6,8 +9,7 @@ document.querySelectorAll(".feedback").forEach((box) => {
     const url = box.dataset.feedbackUrl;
     if (!url) return say("Отзывы пока не сохраняются.");
     try {
-      const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" },
-                                   body: JSON.stringify({ slug: box.dataset.slug, ...payload }) });
+      const r = await postJSON(url, { slug: box.dataset.slug, ...payload });
       if (!r.ok) throw new Error(r.status);
       say(ok);
       return true;
