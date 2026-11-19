@@ -1,0 +1,1 @@
+const a=matchMedia("(prefers-reduced-motion: reduce)").matches;function i(s,t){if(a)return t();s.classList.add("is-leaving"),setTimeout(()=>{t(),s.classList.remove("is-leaving"),[...s.querySelectorAll("li:not([hidden])")].forEach((e,r)=>{e.classList.remove("enter"),e.style.setProperty("--i",Math.min(r,12)),e.offsetWidth,e.classList.add("enter")})},140)}export{i as s};

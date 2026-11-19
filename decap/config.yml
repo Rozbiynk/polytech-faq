@@ -1,0 +1,75 @@
+# Decap CMS на /decap — запасной редактор для владельцев GitHub-аккаунтов (основной — /edit). Поля повторяют src/content.config.ts: поменяли схему — поменяйте и тут.
+backend:
+  name: github
+  repo: Rozbiynk/polytech-faq
+  branch: main
+  base_url: https://faq.rozb.pw
+  auth_endpoint: api/auth
+  auth_scope: public_repo
+  open_authoring: true          # без прав на запись правка уходит предложением (pull request) на одобрение
+  commit_messages:
+    create: "Новая статья: {{slug}}"
+    update: "Правка: {{slug}}"
+    delete: "Удалена статья: {{slug}}"
+    openAuthoring: "{{message}} (от {{author-login}})"
+publish_mode: editorial_workflow
+locale: ru
+site_url: https://faq.rozb.pw
+logo_url: /favicon.svg
+media_folder: public/img
+public_folder: /img
+
+collections:
+  - name: articles
+    label: Статьи
+    label_singular: статью
+    folder: src/content/articles
+    extension: md
+    format: frontmatter
+    create: true
+    slug: "{{url}}"
+    summary: "{{title}}"
+    sortable_fields: [title, checked, people]
+    preview_path: "q/{{slug}}"
+    fields:
+      - { name: title, label: "Вопрос", hint: "Как его задают люди: «Когда заселение в общежитие?»" }
+      - name: url
+        label: "Адрес статьи"
+        hint: "Латиницей через дефис, например dorm-check-in-dates. Задаётся при создании, потом не меняется."
+        pattern: ['^[a-z0-9]+(-[a-z0-9]+)*$', "Только латиница в нижнем регистре, цифры и дефисы"]
+      - name: stages
+        label: "Этапы"
+        widget: select
+        multiple: true
+        min: 1
+        options:
+          - { label: "Поступаю", value: apply }
+          - { label: "Первый курс", value: first-year }
+          - { label: "Учусь", value: study }
+          - { label: "Живу", value: live }
+          - { label: "Меняю планы", value: change }
+          - { label: "Выпускаюсь", value: graduate }
+      - { name: risk, label: "Цена ошибки", hint: "1 — мелочь, 2 — неудобно, 3 — можно потерять место или срок", widget: number, value_type: int, min: 1, max: 3, default: 2 }
+      - name: status
+        label: "Статус"
+        widget: select
+        default: draft
+        options:
+          - { label: "Черновик (из чата, не проверено)", value: draft }
+          - { label: "По сайту вуза (не подтверждено)", value: sourced }
+          - { label: "Проверено по официальному источнику", value: verified }
+      - { name: checked, label: "Дата сверки", widget: datetime, format: "YYYY-MM-DD", date_format: "DD.MM.YYYY", time_format: false, required: false }
+      - { name: actual, label: "К какому году сроки", hint: "Например «Приём 2026»", required: false }
+      - name: sources
+        label: "Официальные источники"
+        label_singular: "источник"
+        widget: list
+        required: false
+        default: []
+        fields:
+          - { name: title, label: "Название страницы" }
+          - { name: url, label: "Ссылка", pattern: ['^https?://', "Ссылка должна начинаться с https://"] }
+      - { name: people, label: "Сколько человек спрашивали в чатах", widget: number, value_type: int, required: false }
+      - { name: aliases, label: "Как ещё спрашивают", hint: "Не видны на сайте, по ним работает поиск: «общага», «ЛК»…", widget: list, required: false, default: [] }
+      - { name: tips, label: "Что говорят студенты", hint: "Опыт, пересказом, без имён и цитат", widget: list, required: false, default: [] }
+      - { name: body, label: "Ответ", hint: "Сначала ответ в 1–3 предложениях, потом шаги. Сроки — с годом.", widget: markdown }
