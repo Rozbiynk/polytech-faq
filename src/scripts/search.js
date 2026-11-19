@@ -1,6 +1,7 @@
 // Поиск (components/Search.astro). Основной — Pagefind: полнотекстовый, с морфологией. Если его файлов нет
 // (превью без каталога pagefind/) — простой поиск по search.json, см. search-fallback.js.
 import { postJSON } from "./lib/post.js";
+import { plain, ranking } from "./lib/search-tuning.js";
 
 const root = document.body.dataset.root || "./";   // путь до корня сайта от текущей страницы
 const base = new URL(root + "pagefind/", location.href).href;
@@ -19,10 +20,6 @@ const reportMiss = (q) => {
   postJSON("/api/miss", { q }).catch(() => {});
 };
 
-// разговорные слова ищем как официальные: «физра» и «физкультура» должны давать одну и ту же выдачу
-const slang = [[/(^|[^а-яё])физ-?р[а-яё]*/gi, "$1физкультура"], [/(^|[^а-яё])общаг[а-яё]*/gi, "$1общежитие"], [/(^|[^а-яё])стипух[а-яё]*/gi, "$1стипендия"]];
-const plain = (q) => slang.reduce((t, [re, to]) => t.replace(re, to), q);
-
 // чипсы-подсказки (data-q): подставляют запрос в строку; до загрузки поиска — запоминаем последний
 let setQuery = null, pending = null;
 document.addEventListener("click", (e) => {
@@ -38,6 +35,7 @@ const mountPagefind = () => {
     element: "#search", bundlePath: base, showImages: false, showSubResults: false, resetStyles: false,
     translations: { placeholder: hint, clear_search: "✕" }, autofocus,
     processTerm: plain,
+    ranking,
     // Pagefind отдаёт адреса от корня сайта; делаем их относительными к текущей странице
     processResult: (r) => {
       r.url = root + r.url.replace(/^\//, "").replace(/\.html$/, "");   // адреса без .html
@@ -45,7 +43,7 @@ const mountPagefind = () => {
       const sum = r.meta && r.meta.summary;
       if (sum) r.excerpt = sum.length > 160 ? sum.slice(0, 160).replace(/\s+\S*$/, "") + "…" : sum;
       // иначе Pagefind UI покажет весь ответ ещё раз блоком «Summary: …»
-      if (r.meta) delete r.meta.summary;
+      if (r.meta) { delete r.meta.summary; delete r.meta.keys; }
       return r;
     },
   });

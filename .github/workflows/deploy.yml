@@ -22,6 +22,10 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+      # поиск: по списку запросов нужная статья должна быть первой. Только для pull request — правку статьи
+      # из редактора (push в main) проверка останавливать не должна.
+      - if: github.event_name == 'pull_request'
+        run: pnpm check:search
       - if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v4
         with:
