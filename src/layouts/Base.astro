@@ -38,15 +38,15 @@ const ogImage = new URL("/og.png", site.url).href;
       <div class="container top__row">
         <div class="top__brand">
           <a class="logo" href="/">Политех.<b>Ответы</b></a>
-          <span class="top__note">{site.note}</span>
+          <span class="top__note"><span class="top__note-long">{site.note}</span><span class="top__note-short">{site.noteShort}</span></span>
         </div>
         <nav class="top__nav" aria-label="Разделы">
           <!-- поиск с любой страницы: «Все вопросы» открываются с полем поиска в фокусе -->
-          <a class="top__search" href="/questions#search" aria-label="Поиск по вопросам">
+          <a class="top__link top__search" href="/questions#search" aria-label="Поиск по вопросам">
             <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m15.5 15.5 5 5" /></svg>
             <span class="top__search-text">Все вопросы</span>
           </a>
-          <a class="btn btn--light" href="/about">О проекте</a>
+          <a class="top__link" href="/about">О проекте</a>
         </nav>
       </div>
     </header>

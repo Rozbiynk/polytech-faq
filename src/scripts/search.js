@@ -36,7 +36,7 @@ const mountPagefind = () => {
   box.textContent = "";
   const ui = new PagefindUI({
     element: "#search", bundlePath: base, showImages: false, showSubResults: false, resetStyles: false,
-    translations: { placeholder: hint }, autofocus,
+    translations: { placeholder: hint, clear_search: "✕" }, autofocus,
     processTerm: plain,
     // Pagefind отдаёт адреса от корня сайта; делаем их относительными к текущей странице
     processResult: (r) => {
@@ -52,6 +52,8 @@ const mountPagefind = () => {
   const input = () => box.querySelector(".pagefind-ui__search-input");
   // у поля Pagefind только placeholder — даём ему имя для экранного диктора, как у поля-заглушки
   input()?.setAttribute("aria-label", label);
+  // кнопка очистки — крестик вместо слов «Очистить поле»: на телефоне слова занимали треть поля
+  box.querySelector(".pagefind-ui__search-clear")?.setAttribute("aria-label", "Очистить поле");
   ready((q) => { ui.triggerSearch(q); input()?.focus(); });
   let timer;
   box.addEventListener("input", (e) => {

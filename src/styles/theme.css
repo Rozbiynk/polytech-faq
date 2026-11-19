@@ -1,5 +1,5 @@
 /* Hallmark · shape: Index-First · genre: modern-minimal · theme: brand (Московский Политех, spec 2026-10-27) · redesign: full · job: find an answer
- * paper: #ffffff · accent: #e63246 · display: Montserrat (stand-in for Gilroy) · body: Verdana · hero: Index (/), Banner (/stage/*), kept (/q/*, /about) · nav: a dark slab, the wordmark, an unofficial note and one light button · footer: a mast on the dark band · signature: the stages as solid blocks in the university's four extra colours on the dark band, beside the search
+ * paper: #ffffff · accent: #e63246 · display: Montserrat (stand-in for Gilroy) · body: Verdana · hero: Index (/), Banner (/stage/*), kept (/q/*, /about) · nav: a dark slab, the wordmark, an unofficial note and two text links · footer: a mast on the dark band · signature: the stages as solid blocks in the university's four extra colours on the dark band, beside the search
  * axes: light/geometric-sans/chromatic-red · posture: full-palette · surface: absolute · contrast: pass · fold: pass · v2.0.0 */
 /* Hallmark · pre-emit critique: P4 H5 E4 S4 R4 V4 · weakest: P, a brand look is the university's argument, not ours; the unofficial note in the nav and the missing logo keep the site honest */
 /* Hallmark · waive 78 · article and about pages are a Long Document with inline heads · an answer page reads as one document, its heads stay at title size */
@@ -46,6 +46,10 @@
   --color-accent-on-dark: color-mix(in oklab, var(--color-accent) 62%, var(--color-on-dark));
   /* рамка поля на тёмной полосе */
   --color-rule-on-dark: color-mix(in oklab, var(--color-on-dark) 50%, var(--color-ink));
+  /* воздух между секциями: справочник, а не лендинг — вдвое плотнее, чем в base.css (там 120/144) */
+  --section-gap-s: 80px; --section-gap: 96px;
+  /* отступ от шапки до содержимого */
+  --page-top: var(--space-xl);
 }
 
 body { line-height: 1.6; }
@@ -61,15 +65,16 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .top { min-height: var(--nav-h); display: grid; align-items: center; color: var(--color-on-dark); background: var(--color-ink); }
 .top__row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); }
 .top__brand { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2xs) var(--space-md); min-width: 0; }
-.logo { white-space: nowrap; font: 700 var(--text-md)/1.2 var(--font-display); color: var(--color-on-dark); text-decoration: none; }
+.logo { display: inline-flex; align-items: center; min-height: 24px; white-space: nowrap; font: 700 var(--text-md)/1.2 var(--font-display); color: var(--color-on-dark); text-decoration: none; }
 .logo b { color: var(--color-accent-on-dark); }
 .logo:hover { text-decoration: underline; text-underline-offset: 0.2em; }
 .top__note { font-size: var(--text-sm); color: var(--color-on-dark-2); white-space: nowrap; }
+.top__note-short { display: none; }
 .top__nav { flex-shrink: 0; display: flex; align-items: center; gap: var(--space-xs); }
-/* лупа: на телефоне только значок, на широком экране — со словами */
-.top__search { display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 44px; min-width: 44px; justify-content: center; padding: 0 var(--space-sm); border-radius: var(--radius); color: var(--color-on-dark); text-decoration: none; font: 700 var(--text-md)/1 var(--font-display); }
-.top__search:hover { background: color-mix(in oklab, var(--color-on-dark) 12%, transparent); }
-.top__search svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+/* ссылки шапки: «Все вопросы» с лупой (на телефоне — только значок) и «О проекте» */
+.top__link { display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 44px; min-width: 44px; justify-content: center; padding: 0 var(--space-sm); border-radius: var(--radius); color: var(--color-on-dark); text-decoration: none; font: 700 var(--text-md)/1 var(--font-display); white-space: nowrap; transition: background-color var(--dur-micro) var(--ease-out); }
+.top__link:hover { background: color-mix(in oklab, var(--color-on-dark) 12%, transparent); }
+.top__link svg { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
 
 /* кнопки и метки: прямые углы, как на сайте вуза */
 .btn, .chip, .stage { transition: background-color var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out), transform var(--dur-micro) var(--ease-out); }
@@ -77,12 +82,11 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .btn:hover { background: var(--color-paper-3); }
 .btn:active { transform: translateY(1px); }
 .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
-.btn.primary { min-height: 52px; background: var(--color-accent); border-color: var(--color-accent); color: var(--color-accent-ink); font-size: var(--text-lg); }
-.btn.primary:hover { background: color-mix(in oklab, var(--color-accent) 86%, var(--color-ink)); }
-.btn--light { border-color: var(--color-on-dark); }
+/* под белым текстом — затемнённый красный: на красном бренда белый даёт 4.25:1, ниже нормы */
+.btn.primary { min-height: 52px; background: var(--color-accent-deep); border-color: var(--color-accent-deep); color: var(--color-accent-ink); font-size: var(--text-lg); }
+.btn.primary:hover { background: color-mix(in oklab, var(--color-accent-deep) 86%, var(--color-ink)); }
 .btn--quiet { border-color: var(--color-rule); }
 .btn.more { justify-self: start; margin-top: var(--space-lg); }
-.top .btn { min-height: 44px; }
 .chip { display: inline-flex; align-items: center; min-height: 40px; padding: var(--space-2xs) var(--space-md); border-radius: var(--radius); font: 600 var(--text-sm)/1.3 var(--font-display); text-decoration: none; color: var(--color-ink); background: var(--color-paper); box-shadow: inset 0 0 0 1px var(--color-rule); }
 .chip:hover { background: var(--color-paper-3); }
 .chip:active { transform: translateY(1px); }
@@ -101,14 +105,16 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 /* метки статуса */
 .pill { display: inline-flex; align-items: center; align-self: start; min-height: 28px; padding: 0 var(--space-sm); border-radius: var(--radius); font: 600 var(--text-sm)/1 var(--font-display); white-space: nowrap; color: var(--color-ink); background: var(--color-paper-3); }
 .pill.draft { background: transparent; border: 1px dashed var(--color-muted); color: var(--color-ink-2); }
-.pill.risk { background: color-mix(in oklab, var(--color-accent) 12%, var(--color-paper)); color: var(--color-accent-deep); }
 .pill.sourced { background: color-mix(in oklab, var(--color-blue) 18%, var(--color-paper)); }
 .pill.verified { background: color-mix(in oklab, var(--color-green) 28%, var(--color-paper)); }
 .pill.actual { background: transparent; box-shadow: inset 0 0 0 1px var(--color-rule); font-weight: 600; }
+/* «важно не ошибиться»: красный только в значке, чтобы метка не спорила с красным бренда и не шумела в списке */
+.risk-mark { display: inline-flex; align-items: center; gap: var(--space-2xs); min-height: 28px; font: 600 var(--text-sm)/1 var(--font-display); white-space: nowrap; color: var(--color-ink-2); }
+.risk-mark::before { content: "!"; flex: none; display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--color-accent-deep); color: var(--color-accent-ink); font: 700 var(--text-xs)/1 var(--font-display); }
 
 /* каркас страницы */
 .page { display: grid; row-gap: var(--section-gap-s); padding-block: 0 var(--section-gap); }
-.page > :first-child:not(.hero) { margin-top: var(--space-2xl); }
+.page > :first-child:not(.hero) { margin-top: var(--page-top); }
 .page:has(> .banner) { row-gap: var(--space-2xl); }
 .page:has(> .banner) > .btn.more { margin-top: 0; }
 /* «← Главная», «← Тема» над заголовком */
@@ -126,7 +132,9 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .hero h1 { font-size: clamp(2rem, 2.2vw + 1.1rem, 3.25rem); line-height: 1.12; max-width: 18ch; }
 .hero .lead { color: var(--color-on-dark-2); }
 .eyebrow { font: 700 var(--text-sm)/1.3 var(--font-display); color: var(--color-accent-on-dark); }
-.hints { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: calc(-1 * var(--space-sm)); }
+/* примеры запросов под полем поиска */
+.hints { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-xs); margin-top: calc(-1 * var(--space-sm)); }
+.hints__label { font-size: var(--text-sm); color: var(--color-on-dark-2); }
 .hint { min-height: 36px; padding: 0 var(--space-md); border: 0; border-radius: var(--radius-pill); background: color-mix(in oklab, var(--color-on-dark) 14%, var(--color-ink)); color: var(--color-on-dark); font: 600 var(--text-sm)/1 var(--font-display); cursor: pointer; transition: background-color var(--dur-micro) var(--ease-out); }
 .hint:hover { background: var(--color-blue); }
 .searchbox { min-width: 0; }
@@ -148,7 +156,6 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .stage:active { transform: translateY(1px); }
 .stage strong { font: 700 var(--text-lg)/1.15 var(--font-display); }
 .stage span { font-size: var(--text-sm); line-height: 1.4; }
-.stage > span:not(.stage__go) { opacity: 0.8; }
 
 /* главная: голова секции слева, строки справа */
 .section { display: grid; gap: var(--space-xl); }
@@ -170,20 +177,26 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .topics__n { grid-column: 2; grid-row: 1; font: 700 var(--text-lg)/1.25 var(--font-display); color: var(--color-muted); }
 
 /* список вопросов */
-.qlist { list-style: none; margin: 0; padding: 0; display: grid; border-top: 2px solid var(--color-ink); }
+/* Строка: вопрос, справа от него «спрашивали N», под вопросом метки. Список сам смотрит на свою ширину
+   (container query): в узком месте — телефон, правая колонка статьи — счётчик встаёт в строку меток. */
+.qlist { list-style: none; margin: 0; padding: 0; display: grid; border-top: 2px solid var(--color-ink); container-type: inline-size; }
 .qlist li { border-bottom: var(--rule-hair) solid var(--color-rule); }
-.qlist a { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--space-xs) var(--space-md); padding: var(--space-lg) var(--space-sm); margin-inline: calc(-1 * var(--space-sm)); text-decoration: none; color: var(--color-ink); transition: background-color var(--dur-short) var(--ease-out); }
+.qlist a { position: relative; display: grid; gap: var(--space-xs); padding: var(--space-lg) 11rem var(--space-lg) var(--space-sm); margin-inline: calc(-1 * var(--space-sm)); text-decoration: none; color: var(--color-ink); transition: background-color var(--dur-short) var(--ease-out); }
 .qlist a:hover { background-color: var(--color-well); }
 .qlist a:focus-visible { outline-offset: -2px; }
 .qlist .q { font: 700 var(--text-lg)/1.3 var(--font-display); }
 .qlist a:hover .q { color: var(--color-blue); }
-.qlist__go { align-self: start; font: 700 var(--text-lg)/1.3 var(--font-display); color: var(--color-blue); opacity: 0; transform: translateX(-4px); transition: opacity var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out); }
-.qlist a:hover .qlist__go, .qlist a:focus-visible .qlist__go { opacity: 1; transform: none; }
-.qlist .badges { display: flex; flex-wrap: wrap; gap: var(--space-2xs); min-width: 0; }
-.qlist .count { justify-self: end; font-size: var(--text-xs); color: var(--color-muted); white-space: nowrap; }
+.qlist__meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2xs) var(--space-sm); min-width: 0; }
+/* счётчик — в правом верхнем углу строки, на уровне первой строки вопроса (место под него — правый отступ ссылки) */
+.qlist .count { position: absolute; top: calc(var(--space-lg) + 0.3em); right: var(--space-sm); font-size: var(--text-xs); color: var(--color-muted); white-space: nowrap; }
+@container (max-width: 34rem) {
+  .qlist a { padding: var(--space-md) var(--space-sm); }
+  .qlist .q { font-size: var(--text-md); }
+  .qlist .count { position: static; }
+}
 
 /* страница этапа: цветной блок этапа */
-.banner { display: grid; gap: var(--space-md); padding: var(--space-2xl); border-radius: var(--radius-panel); background: var(--c, var(--color-ink)); color: var(--c-ink, var(--color-on-dark)); }
+.banner { display: grid; gap: var(--space-xs); padding: var(--space-lg) var(--space-2xl) var(--space-xl); border-radius: var(--radius-panel); background: var(--c, var(--color-ink)); color: var(--c-ink, var(--color-on-dark)); }
 .banner h1 { font-size: clamp(2.25rem, 3vw + 1rem, 4rem); }
 .banner .lead { color: inherit; }
 .banner a { color: inherit; }
@@ -208,20 +221,22 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .article__head { grid-column: 1 / -1; display: grid; gap: var(--space-md); max-width: 60rem; }
 .article h1 { font-size: clamp(1.625rem, 1vw + 1.1rem, 2.25rem); line-height: 1.25; max-width: 30ch; }
 .tags { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-xs); }
-.checked { font-size: var(--text-sm); color: var(--color-muted); }
-.notice { max-width: 60ch; padding: var(--space-sm) var(--space-md); border-radius: var(--radius-panel); font-size: var(--text-sm); color: var(--color-ink-2); background: var(--color-well); }
-.notice.sourced { background: color-mix(in oklab, var(--color-blue) 10%, var(--color-paper)); }
-.notice.verified { background: color-mix(in oklab, var(--color-green) 16%, var(--color-paper)); }
+.tags .chip, .tags .pill { min-height: 32px; padding-block: 0; }
+/* черновик: предупреждение до ответа, пунктиром — как метка «Черновик» */
+.notice { max-width: 60ch; padding: var(--space-sm) var(--space-md); border: 1px dashed var(--color-muted); border-radius: var(--radius); font-size: var(--text-sm); color: var(--color-ink-2); }
+/* пояснение под заголовком блока */
+.block__note { max-width: 60ch; font-size: var(--text-sm); color: var(--color-muted); }
 .article__body { display: grid; gap: var(--space-2xl); min-width: 0; }
 .block { display: grid; gap: var(--space-sm); align-content: start; }
-.block > h2 { font: 700 var(--text-xl)/1.2 var(--font-body); letter-spacing: 0; }
-.block--answer { gap: var(--space-md); min-width: 0; padding: var(--space-xl); border-radius: var(--radius-panel); background: var(--color-well); border-top: 4px solid var(--color-accent); }
+.block > h2 { font-size: var(--text-xl); line-height: 1.2; }
+.block--answer { gap: var(--space-md); min-width: 0; padding: var(--space-xl); border-radius: var(--radius-panel); background: var(--color-well); border-top: 2px solid var(--color-ink); }
 /* синий бренда на сером фоне — 4.4:1, чуть темнее для контраста */
 .block--answer a { color: color-mix(in oklab, var(--color-blue) 82%, var(--color-ink)); }
 .answer { font-size: 1.0625rem; line-height: 1.65; max-width: 65ch; overflow-wrap: break-word; min-width: 0; }
 .answer > :first-child { margin-top: 0; } .answer > :last-child { margin-bottom: 0; }
 .answer p { margin-block: 0 var(--space-sm); }
-.answer > p:first-child { padding: var(--space-sm) var(--space-md); border-left: 4px solid var(--color-blue); background: color-mix(in oklab, var(--color-blue) 7%, var(--color-paper)); }
+/* первый абзац — сам короткий ответ: крупнее, без своей рамки (рамка у блока уже есть) */
+.answer > p:first-child { font-size: var(--text-lead); line-height: 1.55; }
 .answer ol, .answer ul { padding-left: 1.2em; margin-block: var(--space-xs); display: grid; gap: var(--space-2xs); }
 .answer table { width: 100%; border-collapse: collapse; font-size: var(--text-md); }
 .answer th, .answer td { text-align: left; padding: var(--space-xs) var(--space-sm) var(--space-xs) 0; border-bottom: var(--rule-hair) solid var(--color-rule); vertical-align: top; }
@@ -231,22 +246,39 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .sources a { display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 44px; padding: var(--space-xs) var(--space-md); border: 1px solid var(--color-rule); border-radius: var(--radius); background: var(--color-paper); color: var(--color-ink); font: 600 var(--text-sm)/1.3 var(--font-display); text-decoration: none; }
 .sources a::after { content: "↗"; color: var(--color-blue); }
 .sources a:hover { border-color: var(--color-blue); color: var(--color-blue); }
-.tips { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-sm); }
+/* один совет — во всю ширину, несколько — колонками */
+.tips { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: var(--space-sm); }
 .tips li { padding: var(--space-md); border-radius: var(--radius-panel); background: var(--color-well); color: var(--color-ink-2); font-size: var(--text-md); line-height: 1.5; }
-/* чёрный блок фактов справа от ответа */
-.facts { position: sticky; top: var(--space-lg); display: grid; gap: var(--space-md); margin: 0; padding: var(--space-lg); border-radius: var(--radius-panel); background: var(--color-ink); color: var(--color-on-dark); }
-.facts > div { display: grid; gap: var(--space-3xs); }
-.facts dt { font-size: var(--text-sm); color: var(--color-on-dark-2); }
-.facts dd { margin: 0; font: 700 var(--text-md)/1.35 var(--font-display); }
-.facts--risk .facts__risk dd { justify-self: start; padding: var(--space-xs) var(--space-sm); border-radius: var(--radius); background: var(--color-accent); color: var(--color-accent-ink); }
+/* факты о статье: когда сверено, что будет при ошибке, сколько человек спрашивали.
+   В одну колонку (телефон, планшет) — строками под заголовком, до ответа; на широком экране — чёрный блок справа. */
+.facts { display: flex; flex-wrap: wrap; gap: var(--space-2xs) var(--space-lg); margin: 0; font-size: var(--text-sm); }
+.facts > div { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-3xs) var(--space-xs); }
+.facts dt { color: var(--color-muted); }
+.facts dt::after { content: ":"; }
+.facts dd { margin: 0; font: 600 var(--text-sm)/1.35 var(--font-display); }
+.facts--risk .facts__risk dd { padding: var(--space-2xs) var(--space-xs); border-radius: var(--radius); background: var(--color-accent-deep); color: var(--color-accent-ink); }
+@media (width > 60rem) {
+  /* сетка страницы ответа: слева ответ и отзыв, справа факты и под ними похожие вопросы */
+  .article--answer { grid-template-rows: auto auto 1fr auto; }
+  .article--answer > .facts { grid-area: 2 / 2; }
+  .article--answer > .article__body { grid-area: 2 / 1 / span 2; }
+  .article--answer > .related { grid-area: 3 / 2 / span 2; }
+  .article--answer > .feedback { grid-area: 4 / 1; }
+  .facts { display: grid; gap: var(--space-md); padding: var(--space-lg); border-radius: var(--radius-panel); background: var(--color-ink); color: var(--color-on-dark); font-size: var(--text-md); }
+  .facts > div { display: grid; gap: var(--space-3xs); }
+  .facts dt { font-size: var(--text-sm); color: var(--color-on-dark-2); }
+  .facts dt::after { content: none; }
+  .facts dd { font: 700 var(--text-md)/1.35 var(--font-display); }
+  .facts--risk .facts__risk dd { justify-self: start; padding: var(--space-xs) var(--space-sm); }
+}
 /* обратная связь под статьёй */
-.feedback { display: grid; gap: var(--space-md); max-width: 52rem; padding-top: var(--space-xl); border-top: 2px solid var(--color-ink); }
+.feedback { display: grid; gap: var(--space-md); align-content: start; max-width: 52rem; padding-top: var(--space-xl); border-top: 2px solid var(--color-ink); }
 .feedback .row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm); }
 .feedback__q { font: 700 var(--text-lg)/1.3 var(--font-display); margin-right: var(--space-xs); }
 .feedback form { display: grid; gap: var(--space-xs); }
 .thanks { font-size: var(--text-md); color: var(--color-ink); font-weight: 700; }
 /* похожие вопросы под статьёй */
-.related { display: grid; gap: var(--space-md); max-width: 52rem; }
+.related { display: grid; gap: var(--space-md); align-content: start; max-width: 52rem; }
 .related h2 { font-size: var(--text-xl); }
 
 /* о проекте (та же сетка, что у статьи, но в одну колонку) */
@@ -271,14 +303,18 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 }
 .band .search .pagefind-ui { --pagefind-ui-background: transparent; --pagefind-ui-text: var(--color-on-dark); --pagefind-ui-border: var(--color-rule-on-dark); }
 .search .pagefind-ui .pagefind-ui__search-input { height: 60px; padding: 0 var(--space-md) 0 52px; border-radius: 0; font: 400 var(--text-md)/1 var(--font-body); text-overflow: ellipsis; color: var(--color-ink); }
-.search .pagefind-ui .pagefind-ui__search-input:not(:placeholder-shown) { padding-right: 104px; }
+.search .pagefind-ui .pagefind-ui__search-input:not(:placeholder-shown) { padding-right: 60px; }
 .search .pagefind-ui .pagefind-ui__search-input::placeholder { opacity: 1; color: var(--color-muted); }
 .search .pagefind-ui__search-input:focus-visible, .qinput:focus-visible { outline: 2px solid var(--color-blue); outline-offset: 0; border-color: var(--color-blue); }
 .band .search .pagefind-ui .pagefind-ui__search-input { color: var(--color-on-dark); }
+/* на тёмной полосе синяя обводка сливается с фоном — белая, вместе с рамкой 2 px */
+.band .search .pagefind-ui__search-input:focus-visible, .band .qinput:focus-visible { outline: 1px solid var(--color-on-dark); border-color: var(--color-on-dark); }
 .band .search .pagefind-ui .pagefind-ui__search-input::placeholder { color: var(--color-on-dark-2); }
 .band .search .pagefind-ui__form::before { background-color: var(--color-on-dark-2); }
-.search .pagefind-ui .pagefind-ui__search-clear { top: 1px; right: 1px; height: 58px; padding: 0 var(--space-md); border: 0; background: transparent; font: 400 var(--text-sm)/1 var(--font-body); color: var(--color-muted); }
-.search .pagefind-ui .pagefind-ui__search-clear:hover { text-decoration: underline; }
+/* очистка поля — крестик (текст и подпись задаёт scripts/search.js) */
+.search .pagefind-ui .pagefind-ui__search-clear { top: 1px; right: 1px; width: 58px; height: 58px; padding: 0; border: 0; background: transparent; font: 400 var(--text-lg)/1 var(--font-body); color: var(--color-muted); }
+.search .pagefind-ui .pagefind-ui__search-clear:hover { color: var(--color-ink); }
+.band .search .pagefind-ui .pagefind-ui__search-clear:hover { color: var(--color-on-dark); }
 .band .search .pagefind-ui .pagefind-ui__search-clear { color: var(--color-on-dark-2); }
 .band .search .pagefind-ui .pagefind-ui__drawer:not(:empty) { margin-top: var(--space-xs); padding: 0 var(--space-lg) var(--space-md); gap: 0; background: var(--color-paper); color: var(--color-ink); --pagefind-ui-text: var(--color-ink); }
 .search .pagefind-ui .pagefind-ui__message { padding-top: var(--space-md); font: 400 var(--text-sm)/1.4 var(--font-body); color: var(--color-ink-2); }
@@ -288,6 +324,11 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 .search .pagefind-ui .pagefind-ui__drawer .pagefind-ui__result-title .pagefind-ui__result-link { color: var(--color-link); font-family: var(--font-display); font-weight: 700; }
 .search .pagefind-ui .pagefind-ui__result-excerpt { font: 400 var(--text-sm)/1.5 var(--font-body); color: var(--color-ink-2); }
 .search .pagefind-ui__button { font-family: var(--font-display); font-weight: 700; color: var(--color-ink); background: transparent; }
+@media (width > 60rem) {
+  /* главная на широком экране: выдача открывается поверх страницы, а не раздвигает первый экран
+     (иначе плитки этапов в соседней колонке уезжали вниз на каждую букву) */
+  .band .search .pagefind-ui .pagefind-ui__drawer:not(:empty) { position: absolute; inset: 100% 0 auto; z-index: var(--z-dropdown); max-height: min(60svh, 34rem); overflow-y: auto; overscroll-behavior: contain; box-shadow: 0 var(--space-md) var(--space-xl) rgb(0 0 0 / 0.5); }
+}
 /* поиск: поле-заглушка до загрузки Pagefind и поле запасного поиска (search-fallback.js) */
 .qinput { width: 100%; min-height: 60px; padding: 0 var(--space-md) 0 52px; border: 1px solid var(--color-muted); border-radius: 0; background: var(--color-paper); color: var(--color-ink); font-size: var(--text-md); outline: 2px solid transparent; outline-offset: -3px; }
 .qinput:disabled { opacity: 1; cursor: progress; }
@@ -300,24 +341,24 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
 
 /* телефон и планшет */
 @media (max-width: 60rem) {
-  :root { --nav-h: 64px; }
+  :root { --nav-h: 64px; --section-gap-s: 64px; --section-gap: 80px; --page-top: var(--space-lg); }
   .hero, .split, .article, .foot__row, .about__rows .block { grid-template-columns: minmax(0, 1fr); }
   .hero { min-height: 0; gap: var(--space-2xl); padding-block: var(--space-xl) var(--space-2xl); }
   .split > h2 { position: static; max-width: none; }
   .stages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .facts { position: static; }
-  .banner { padding: var(--space-xl) var(--space-lg); }
+  .banner { padding: var(--space-md) var(--space-lg) var(--space-lg); }
+  .article { row-gap: var(--space-lg); }
   .about__rows .block { gap: var(--space-xs); }
 }
 @media (max-width: 40rem) {
-  /* шапка */
-  .top__row { padding-block: var(--space-sm); }
-  .top__brand { flex: 1 1 0; flex-direction: column; align-items: flex-start; }
-  .logo { white-space: normal; }
-  .logo b { display: block; }
-  .logo, .top .btn, .top__note { font-size: var(--text-xs); }
-  .top__note { white-space: normal; }
-  .top__search { padding: 0; }
+  :root { --nav-h: 60px; --section-gap-s: 48px; --section-gap: 64px; --page-top: var(--space-md); }
+  /* шапка: название и под ним одна строка «Неофициальный сайт»; справа лупа и «О проекте» */
+  .top__brand { flex: 1 1 0; flex-direction: column; align-items: flex-start; gap: 0; }
+  .top__note { font-size: var(--text-xs); }
+  .top__note-long { display: none; }
+  .top__note-short { display: inline; }
+  .top__nav { gap: 0; margin-right: calc(-1 * var(--space-xs)); }
+  .top__link { padding: 0 var(--space-xs); font-size: var(--text-sm); }
   .top__search-text { display: none; }
   /* главная */
   .hero h1 { font-size: 1.875rem; }
@@ -327,9 +368,6 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
   .stage__go { top: 50%; bottom: auto; translate: 0 -50%; }
   .tabs { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: var(--space-2xs); }
   .topics { grid-template-columns: minmax(0, 1fr); }
-  /* списки вопросов */
-  .qlist .q { font-size: var(--text-md); }
-  .qlist a { padding-block: var(--space-md); }
   /* статья */
   .article h1 { font-size: 1.625rem; }
   .block > h2 { font-size: 1.25rem; }
@@ -338,26 +376,28 @@ mark { background: color-mix(in oklab, var(--color-blue) 16%, var(--color-paper)
   .answer table { table-layout: fixed; font-size: var(--text-sm); }
   .answer th, .answer td:last-child { white-space: normal; }
   .answer td, .answer th { overflow-wrap: break-word; }
-  .tips { grid-template-columns: minmax(0, 1fr); }
+  .answer > p:first-child { font-size: 1.0625rem; }
+  /* вопрос отдельной строкой, под ним «Да», «Нет» и «Сообщить об ошибке» */
+  .feedback__q { flex-basis: 100%; margin-right: 0; }
 }
 
 /* смена вкладки (scripts/lib/swap-list.js): список уходит и въезжает строками */
-.is-leaving { opacity: 0; transform: translateY(12px); transition: opacity 200ms var(--ease-in), transform 200ms var(--ease-in); }
-.enter { animation: list-in 560ms var(--ease-out) both; animation-delay: calc(var(--i, 0) * 40ms); }
-@keyframes list-in { from { opacity: 0; transform: translateY(28px); } }
+.is-leaving { opacity: 0; transform: translateY(6px); transition: opacity 140ms var(--ease-in), transform 140ms var(--ease-in); }
+.enter { animation: list-in 260ms var(--ease-out) both; animation-delay: calc(var(--i, 0) * 20ms); }
+@keyframes list-in { from { opacity: 0; transform: translateY(12px); } }
 
 /* переход между страницами: шапка стоит на месте, содержимое плавно сменяется (браузеры без поддержки — как раньше) */
 @view-transition { navigation: auto; }
 .top { view-transition-name: site-top; }
-::view-transition-old(root) { animation: page-out 220ms var(--ease-in) both; }
-::view-transition-new(root) { animation: page-in 480ms var(--ease-out) both; }
-@keyframes page-out { to { opacity: 0; transform: translateY(-16px); } }
-@keyframes page-in { from { opacity: 0; transform: translateY(32px); } }
+::view-transition-old(root) { animation: page-out 140ms var(--ease-in) both; }
+::view-transition-new(root) { animation: page-in 280ms var(--ease-out) both; }
+@keyframes page-out { to { opacity: 0; transform: translateY(-8px); } }
+@keyframes page-in { from { opacity: 0; transform: translateY(16px); } }
 
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
   .is-leaving { transition: none; }
-  .btn, .chip, .stage, .qlist a, .topics a, .stage__go, .qlist__go, .hint { transition: none; }
+  .btn, .chip, .stage, .qlist a, .topics a, .stage__go, .hint, .top__link { transition: none; }
   .stage:hover .stage__go { transform: none; }
   .btn:active, .chip:active, .stage:active { transform: none; }
 }

@@ -14,5 +14,5 @@ export function swapList(list, update) {
       void li.offsetWidth;   // перезапуск анимации
       li.classList.add("enter");
     });
-  }, 200);
+  }, 140);
 }

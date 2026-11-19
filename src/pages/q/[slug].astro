@@ -26,7 +26,9 @@ const topic = topicBySlug[topicOf(a)];
 const checked = d.checked && { iso: isoDate(d.checked), text: longDate(d.checked) };
 ---
 <Base title={d.title} root="../" description={`${d.title} Ответ для студентов и абитуриентов Московского Политеха.`}>
-  <article class="article" data-pagefind-body>
+  {/* порядок в разметке — как читают на телефоне: заголовок, факты, ответ, отзыв, похожие;
+      на широком экране факты и похожие встают в правую колонку (.article--answer в theme.css) */}
+  <article class="article article--answer" data-pagefind-body>
     <header class="article__head">
       <a class="crumb" href={`/questions#${topic.slug}`} data-pagefind-ignore>← {topic.title}</a>
       <div class="tags">
@@ -34,10 +36,16 @@ const checked = d.checked && { iso: isoDate(d.checked), text: longDate(d.checked
         <span class={`pill ${d.status}`} data-pagefind-ignore>{statuses[d.status].label}</span>
         {d.actual && <span class="pill actual" data-pagefind-ignore>{d.actual}</span>}
       </div>
-      {checked && <p class="checked" data-pagefind-ignore>{statuses[d.status].checked} <time datetime={checked.iso}>{checked.text}</time></p>}
       <h1>{d.title}</h1>
-      <p class={`notice ${d.status}`} data-pagefind-ignore>{statuses[d.status].note}</p>
+      {/* предупреждение о черновике — до ответа; про сверку с сайтом вуза — у источников */}
+      {d.status === "draft" && <p class="notice draft" data-pagefind-ignore>{statuses.draft.note}</p>}
     </header>
+
+    <dl class:list={["facts", d.risk === 3 && "facts--risk"]} data-pagefind-ignore>
+      <div><dt>{checked ? statuses[d.status].checked : "Проверено"}</dt><dd>{checked ? <time datetime={checked.iso}>{checked.text}</time> : "ещё нет"}</dd></div>
+      <div class="facts__risk"><dt>Если ошибиться</dt><dd>{riskLabels[d.risk as keyof typeof riskLabels]}</dd></div>
+      {d.people && <div><dt>Спрашивали</dt><dd class="num">{d.people} человек в чатах</dd></div>}
+    </dl>
 
     <div class="article__body">
       <section class="block block--answer">
@@ -47,6 +55,7 @@ const checked = d.checked && { iso: isoDate(d.checked), text: longDate(d.checked
 
       <section class="block">
         <h2>Официальные источники</h2>
+        {d.status !== "draft" && <p class="block__note" data-pagefind-ignore>{statuses[d.status].note}</p>}
         {d.sources.length
           ? <ul class="sources">{d.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.title}<span class="visually-hidden"> (откроется в новой вкладке)</span></a></li>)}</ul>
           : <p class="empty">Ещё не добавлены. Знаете, где это написано на сайте вуза? Сообщите внизу страницы.</p>}
@@ -61,21 +70,15 @@ const checked = d.checked && { iso: isoDate(d.checked), text: longDate(d.checked
       )}
     </div>
 
-    <dl class:list={["facts", d.risk === 3 && "facts--risk"]} data-pagefind-ignore>
-      {/* у черновика здесь «Проверено: ещё нет / дата», а не «Обновлено», как в строке над заголовком */}
-      <div><dt>{statuses[d.status === "sourced" ? "sourced" : "verified"].checked}</dt><dd>{checked ? checked.text : "ещё нет"}</dd></div>
-      <div class="facts__risk"><dt>Цена ошибки</dt><dd>{riskLabels[d.risk as keyof typeof riskLabels]}</dd></div>
-      {d.people && <div><dt>Спрашивали</dt><dd class="num">{d.people} человек в чатах</dd></div>}
-    </dl>
+    <Feedback slug={a.id} />
+    {related.length > 0 && (
+      <section class="related" aria-labelledby="related-h" data-pagefind-ignore>
+        <h2 id="related-h">Похожие вопросы</h2>
+        <QuestionList items={related} />
+      </section>
+    )}
 
     <!-- формулировки из чатов: не показываются, но по ним находит поиск («общага», «ЛК», опечатки) -->
     <div hidden>{d.aliases.join(" · ")}</div>
   </article>
-  <Feedback slug={a.id} />
-  {related.length > 0 && (
-    <section class="related" aria-labelledby="related-h">
-      <h2 id="related-h">Похожие вопросы</h2>
-      <QuestionList items={related} />
-    </section>
-  )}
 </Base>

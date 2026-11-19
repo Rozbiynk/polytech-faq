@@ -17,11 +17,12 @@ const liveTopics = topics.map((t) => ({ ...t, n: all.filter((a) => topicOf(a) ==
       <p class="eyebrow">{site.slogan}</p>
       <h1>Ответы на вопросы, которые в чатах задают каждый год</h1>
       <p class="lead">{site.tagline}. Ищите своими словами:</p>
-      <div class="hints" aria-label="Примеры запросов">
-        {site.hints.map((h) => <button type="button" class="hint" data-q={h}>{h}</button>)}
-      </div>
       <div class="searchbox">
         <Search />
+      </div>
+      <div class="hints">
+        <span class="hints__label" id="hints-label">Попробуйте:</span>
+        {site.hints.map((h) => <button type="button" class="hint" data-q={h} aria-describedby="hints-label">{h}</button>)}
       </div>
       <div class="popular">
         <span class="popular__label">Часто ищут</span>
