@@ -50,7 +50,7 @@ const topicMap: Record<string, TopicSlug> = {
   "career-center": "career", "project-activity": "career",
   // по справочнику первокурсника 2025
   "campus-food": "study", "campus-locations": "study", "class-duration": "study", "find-classroom": "study",
-  "library-borrowing": "study", "library-locations": "study", "digital-libraries": "study", "group-representative": "study",
+  "library-borrowing": "study", "library-locations": "study", "digital-libraries": "study", "group-representative": "study", "group-number": "study",
   "session-and-grades": "study", "exam-admission": "study", "exam-retakes": "study", "missed-exam": "study",
   "first-year-curator": "support", "psychological-support": "support", "international-office": "support", "student-union": "support",
   "lms-login": "documents", "university-mfc": "documents", "official-channels": "documents", "student-social-card": "documents",
