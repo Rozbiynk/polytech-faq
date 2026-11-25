@@ -83,6 +83,8 @@ const cases = [
   ["физра", ["pe-credit", "pe-medical-group"]],
   ["зачёт по физкультуре", ["pe-credit"]],
   ["расписание", ["schedule"]],
+  ["номер группы", ["group-number"]],
+  ["расшифровка номера группы", ["group-number"]],
   ["пары", ["class-duration"]],
   ["учебный план", ["study-plan"]],
   ["сессия", ["session-and-grades"]],
